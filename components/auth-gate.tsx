@@ -1,0 +1,28 @@
+"use client";
+import { FormEvent, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import { useApp } from "./app-provider";
+import { ProfileEditor } from "./profile-page";
+import { Icon } from "./icon";
+export function AuthGate({children}:{children:React.ReactNode}){
+ const {configured,loading,error,user,profile,reload}=useApp();
+ if(!configured)return <div className="auth-backdrop"><section className="auth-card"><span className="auth-logo"><Icon name="compass" size={26}/>TrojanPals</span><h1>Connect your workspace.</h1><p>Add your Supabase project URL and publishable key to <code>.env.local</code>, run the two SQL files, and restart the development server.</p><p>Follow <strong>BACKEND_SETUP.md</strong> in the project folder. No student profile or review data is shown until the backend is connected.</p></section></div>;
+ if(loading)return <div className="auth-backdrop"><section className="auth-card" role="status"><Icon name="compass" size={35}/><h1>Opening your workspace…</h1><p>Loading your account from Supabase.</p></section></div>;
+ if(error)return <div className="auth-backdrop"><section className="auth-card" role="alert"><h1>We couldn’t load your workspace.</h1><p>{error}</p><p>Confirm both SQL files ran successfully and the environment values are correct.</p><button className="btn primary" onClick={()=>void reload()}>Try again</button></section></div>;
+ if(!user)return <AuthScreen/>;
+ if(!profile.onboardingComplete)return <div className="onboarding-backdrop"><section className="onboarding-intro"><span className="auth-logo"><Icon name="compass" size={26}/>TrojanPals</span><h1>Let’s make this <em>your path.</em></h1><p>You’re signed in as {user.email}. Create your profile to enter your workspace.</p></section><ProfileEditor onboarding/></div>;
+ return children;
+}
+function AuthScreen(){
+ const {reload}=useApp();const [mode,setMode]=useState<"login"|"signup">("login");const [email,setEmail]=useState("");const [password,setPassword]=useState("");const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [notice,setNotice]=useState("");
+ useEffect(()=>{if(new URLSearchParams(window.location.search).has("auth_error"))setError("The confirmation link could not be completed. Sign in if you already confirmed your email, or request another confirmation below.");},[]);
+ async function submit(event:FormEvent){event.preventDefault();setBusy(true);setError("");setNotice("");try{
+  const client=createClient();
+  if(mode==="signup"){
+   const {data,error}=await client.auth.signUp({email:email.trim(),password,options:{emailRedirectTo:`${window.location.origin}/auth/callback`}});if(error)throw error;
+   if(data.session)await reload();else {setNotice("Check your email for a confirmation link. Open it in this browser, then return here to sign in and create your profile.");setPassword("");}
+  }else{const {error}=await client.auth.signInWithPassword({email:email.trim(),password});if(error)throw error;await reload();}
+ }catch(reason){setError(reason instanceof Error?reason.message:"Sign-in failed. Please try again.");}finally{setBusy(false);}}
+ async function resend(){if(!email.trim()){setError("Enter your email address first.");return;}setBusy(true);setError("");try{const {error}=await createClient().auth.resend({type:"signup",email:email.trim(),options:{emailRedirectTo:`${window.location.origin}/auth/callback`}});if(error)throw error;setNotice("If an account is waiting for confirmation, a new link has been requested. Check your inbox and spam folder.");}catch(reason){setError(reason instanceof Error?reason.message:"Could not request a link.");}finally{setBusy(false);}}
+ return <div className="auth-backdrop"><section className="auth-story"><span className="eyebrow">YOUR NEXT CHAPTER</span><h1>Your interests.<br/>Your people.<br/><em>Your path.</em></h1><p>Find courses that excite you, learn from student experiences, and connect your curiosity with what comes next.</p><span className="auth-story-note">USC hackathon prototype · Not affiliated with USC</span></section><section className="auth-card"><span className="auth-logo"><Icon name="compass" size={26}/>TrojanPals</span><h2>{mode==="login"?"Welcome back.":"Start your next chapter."}</h2><p>{mode==="login"?"Sign in to see your own profile and saved courses.":"Create an account, then we’ll help you set up your profile."}</p><div className="auth-mode"><button className={mode==="login"?"selected":""} onClick={()=>{setMode("login");setError("");}}>Sign in</button><button className={mode==="signup"?"selected":""} onClick={()=>{setMode("signup");setError("");}}>Create account</button></div><form onSubmit={submit}><label>Email address<input type="email" required autoComplete="email" maxLength={254} value={email} onChange={e=>setEmail(e.target.value)} placeholder="you@example.com"/></label><label>Password<input type="password" required minLength={mode==="signup"?8:1} maxLength={256} autoComplete={mode==="signup"?"new-password":"current-password"} value={password} onChange={e=>setPassword(e.target.value)}/></label>{mode==="signup"&&<small className="field-help">Use at least 8 characters. No one else’s supplied profile is assigned to your account.</small>}{error&&<p className="form-error" role="alert">{error}</p>}{notice&&<p className="form-success" role="status">{notice}</p>}<button className="btn primary" disabled={busy} type="submit">{busy?"Please wait…":mode==="login"?"Sign in":"Create account"}<Icon name="arrow" size={17}/></button></form><button className="text-button resend" disabled={busy} onClick={()=>void resend()}>Resend confirmation email</button></section></div>;
+}

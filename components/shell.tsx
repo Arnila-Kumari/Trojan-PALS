@@ -27,8 +27,8 @@ export function Shell({children}:{children:React.ReactNode}) {
       <Link className="account" href="/profile"><span className="avatar">{profile.name.trim().slice(0,1).toUpperCase()||"T"}</span><span>{profile.name||"Trojan student"}<small>{profile.program||"Student"}</small></span><Icon name="chevron" size={16}/></Link>
     </aside>
     <div className="main-shell">
-      <header className="topbar"><div className="breadcrumb">Your workspace <span>/</span> <strong>{current.label}</strong></div><div className="topbar-right"><span className="demo-badge"><span/>Frontend demo</span><Link href="/profile" className="avatar small" aria-label="Open profile">{profile.name.trim().slice(0,1).toUpperCase()||"T"}</Link></div></header>
-      <div className="demo-strip"><Icon name="info" size={14}/><span>Sample data throughout. Course details, reviews, research directions, and chat responses are illustrative—not verified USC guidance.</span></div>
+      <header className="topbar"><div className="breadcrumb">Your workspace <span>/</span> <strong>{current.label}</strong></div><div className="topbar-right"><span className="demo-badge"><span/>Connected workspace</span><Link href="/profile" className="avatar small" aria-label="Open profile">{profile.name.trim().slice(0,1).toUpperCase()||"T"}</Link></div></header>
+      <div className="demo-strip"><Icon name="info" size={14}/><span>Profiles are private to your account. Supplied reviews are unverified reports; conflicting records are preserved. Research cards are exploratory.</span></div>
       {storageWarning&&<div className="storage-warning" role="status">{storageWarning}</div>}
       <main id="main" tabIndex={-1}>{children}</main>
       <footer className="footer"><span>Made for curious Trojans.</span><span>TrojanPals · Hackathon prototype · Not affiliated with USC</span></footer>

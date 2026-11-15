@@ -4,3 +4,11 @@ out/
 .env*
 *.tsbuildinfo
 .DS_Store
+
+!.env.example
+.backend-backup-*/
+.env*
+!.env.example
+node_modules/
+.next/
+.backend-backup-*/
