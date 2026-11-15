@@ -1,0 +1,63 @@
+{
+  "courseCount": 10,
+  "reviewCount": 28,
+  "templateCount": 10,
+  "courses": [
+    {
+      "id": "CSCI 570",
+      "title": "Analysis of Algorithms",
+      "reviewCount": 4
+    },
+    {
+      "id": "CSCI 585",
+      "title": "Database Systems",
+      "reviewCount": 4
+    },
+    {
+      "id": "CSCI 544",
+      "title": "Applied Natural Language Processing",
+      "reviewCount": 4
+    },
+    {
+      "id": "CSCI 566",
+      "title": "Deep Learning and Its Applications",
+      "reviewCount": 4
+    },
+    {
+      "id": "CSCI 445",
+      "title": "Robotics",
+      "reviewCount": 1
+    },
+    {
+      "id": "CSCI 530",
+      "title": "Applied Cryptography",
+      "reviewCount": 1
+    },
+    {
+      "id": "CSCI 529AB",
+      "title": "Advanced Game Project",
+      "reviewCount": 1
+    },
+    {
+      "id": "CSCI 642",
+      "title": "Robot Learning",
+      "reviewCount": 3
+    },
+    {
+      "id": "CSCI 556",
+      "title": "Introduction to Cryptography",
+      "reviewCount": 3
+    },
+    {
+      "id": "CSCI 529A",
+      "title": "Graduate Advanced Game Project",
+      "reviewCount": 3
+    }
+  ],
+  "notes": [
+    "Imported reports are user-supplied and unverified.",
+    "Differences between source files are preserved, not silently resolved.",
+    "CSCI 529A and CSCI 529AB are distinct records; CSCI 445/642 and CSCI 530/556 are not merged.",
+    "No numeric workload estimates, syllabus weights, prerequisites, or account credentials were invented."
+  ]
+}

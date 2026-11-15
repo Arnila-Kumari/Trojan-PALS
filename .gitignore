@@ -1,6 +1,15 @@
-node_modules/
+# Next.js generated files
 .next/
-out/
-.env*
-*.tsbuildinfo
-.DS_Store
+node_modules/
+
+# Python
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Secrets
+.env
+.env.*
+!.env.example

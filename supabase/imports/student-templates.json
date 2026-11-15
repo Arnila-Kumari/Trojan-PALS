@@ -1,0 +1,159 @@
+{
+  "students": [
+    {
+      "student": "Student 1",
+      "semester": "2nd",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Programming Fundamentals",
+        "Mathematics",
+        "Digital Logic"
+      ],
+      "technical_interests": ["AI", "ML"],
+      "preferred_assessment": "Only Project"
+    },
+    {
+      "student": "Student 2",
+      "semester": "4th",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Data Structures",
+        "OOP",
+        "Database Management Systems"
+      ],
+      "technical_interests": ["Game Development"],
+      "preferred_assessment": "Only Exam"
+    },
+    {
+      "student": "Student 3",
+      "semester": "6th",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Computer Networks",
+        "Operating Systems",
+        "Java Programming"
+      ],
+      "technical_interests": ["Cybersecurity", "Networking"],
+      "preferred_assessment": "No Preference",
+      "research": {
+        "lab_name": "ANT (Analysis of Network Traffic) Lab",
+        "professor": "John Heidemann",
+        "research_topic": "Network traffic analysis and anomaly detection",
+        "lab_work": "Analyzes network traffic datasets and writes scripts to identify unusual traffic patterns.",
+        "work_with_professor": "Assists the professor with experiments evaluating methods for detecting network anomalies."
+      }
+    },
+    {
+      "student": "Student 4",
+      "semester": "8th",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Machine Learning",
+        "Python",
+        "Software Engineering",
+        "DBMS"
+      ],
+      "technical_interests": ["AI", "ML"],
+      "preferred_assessment": "Only Project",
+      "research": {
+        "lab_name": "Machine Learning and Data Mining Lab (Melady)",
+        "professor": "Yan Liu",
+        "research_topic": "Predictive modeling using machine learning",
+        "lab_work": "Prepares datasets, implements baseline models in Python, and compares prediction results.",
+        "work_with_professor": "Works with the professor on evaluating machine learning models and documenting experimental findings."
+      }
+    },
+    {
+      "student": "Student 5",
+      "semester": "1st",
+      "level": "Graduate",
+      "courses_taken": [
+        "Advanced Programming",
+        "Research Methodology"
+      ],
+      "technical_interests": ["AI", "ML", "Cybersecurity"],
+      "preferred_assessment": "No Preference"
+    },
+    {
+      "student": "Student 6",
+      "semester": "2nd",
+      "level": "Graduate",
+      "courses_taken": [
+        "Deep Learning",
+        "Data Mining",
+        "Cloud Computing"
+      ],
+      "technical_interests": ["AI", "ML"],
+      "preferred_assessment": "Only Exam",
+      "research": {
+        "lab_name": "Intelligence and Knowledge Discovery (INK) Research Lab",
+        "professor": "Xiang Ren",
+        "research_topic": "Knowledge discovery using language models",
+        "lab_work": "Builds data-processing pipelines and runs deep learning experiments for extracting knowledge from text.",
+        "work_with_professor": "Works with the professor on comparing model performance and analyzing errors in knowledge extraction."
+      }
+    },
+    {
+      "student": "Student 7",
+      "semester": "3rd",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Web Development",
+        "OOP",
+        "Computer Graphics"
+      ],
+      "technical_interests": ["Game Development"],
+      "preferred_assessment": "Only Project",
+      "research": {
+        "lab_name": "Computer Graphics, Animation and Simulation Laboratory",
+        "professor": "Jernej Barbic",
+        "research_topic": "Interactive animation and simulation for games",
+        "lab_work": "Develops small graphics prototypes and tests animation behavior in interactive scenes.",
+        "work_with_professor": "Assists the professor with prototype demonstrations and basic performance measurements for animation experiments."
+      }
+    },
+    {
+      "student": "Student 8",
+      "semester": "5th",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Network Security",
+        "Computer Networks",
+        "Cryptography"
+      ],
+      "technical_interests": ["Cybersecurity", "Networking"],
+      "preferred_assessment": "Only Exam",
+      "research": {
+        "lab_name": "STEEL Security Research Lab",
+        "professor": "Jelena Mirkovic",
+        "research_topic": "Network defense and security evaluation",
+        "lab_work": "Runs controlled security experiments in an isolated lab environment and analyzes network logs.",
+        "work_with_professor": "Assists the professor with evaluating network defense methods and summarizing experimental results."
+      }
+    },
+    {
+      "student": "Student 9",
+      "semester": "3rd",
+      "level": "Graduate",
+      "courses_taken": [
+        "Neural Networks",
+        "Advanced Algorithms",
+        "Big Data Analytics"
+      ],
+      "technical_interests": ["AI", "ML", "Networking"],
+      "preferred_assessment": "No Preference"
+    },
+    {
+      "student": "Student 10",
+      "semester": "7th",
+      "level": "Undergraduate",
+      "courses_taken": [
+        "Ethical Hacking",
+        "Operating Systems",
+        "Network Administration"
+      ],
+      "technical_interests": ["Cybersecurity"],
+      "preferred_assessment": "Only Project"
+    }
+  ]
+}
