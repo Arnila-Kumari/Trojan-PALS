@@ -5,8 +5,10 @@ from .models import StudentPreferences, RecommendationResponse
 from .recommender import recommend
 from fastapi import HTTPException
 from .chat_service import ChatRequest, ChatResponse, chat
+from .readiness_api import router as readiness_router
 
 app = FastAPI(title='Trojan PALS — Course Recommendations', version='0.3.0')
+app.include_router(readiness_router)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:3000"],
@@ -55,3 +57,9 @@ from .chat_router import (
 )
 def routed_chat_endpoint(request: RoutedChatRequest):
     return route_chat(request)
+
+
+# Journey B: research matching + roadmap (/research/*)
+from .research_api import router as research_router
+
+app.include_router(research_router)

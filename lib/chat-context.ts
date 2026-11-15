@@ -15,7 +15,7 @@ export function buildChatContext(message:string,profile:Profile,catalog:Course[]
  };
 }
 export type ChatContext=ReturnType<typeof buildChatContext>;
-export type ChatReply={text:string;courseIds:string[];researchIds:string[];reviewIds:string[];mode:"matching"|"llm";};
+export type ChatReply={text:string;courseIds:string[];researchIds:string[];reviewIds:string[];mode:"matching"|"llm";roadmapLink?:string;};
 export function matchingReply(message:string,context:ChatContext):ChatReply{
  const q=message.toLowerCase();
  if(/email|outreach/.test(q))return {text:"This is a draft only; nothing has been sent.\n\nSubject: Interest in your work on [verified research topic]\n\nDear Professor [Name],\n\nI’m a USC student interested in [topic]. I read [verified publication title], and I was curious about [specific question]. My background includes [relevant course or project].\n\nAre there ways for a student with my background to contribute, or preparation you would recommend?\n\nThank you,\n[Your name]\n\nReplace all placeholders after checking actual faculty and publication information.",courseIds:[],researchIds:[],reviewIds:[],mode:"matching"};

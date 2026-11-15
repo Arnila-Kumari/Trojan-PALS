@@ -63,3 +63,59 @@ def generate_text(
         raise RuntimeError(
             f"Groq request failed: {exc}"
         ) from exc
+        
+def generate_structured_json(
+    prompt: str,
+    system_prompt: str,
+) -> str:
+    """Generate JSON for research method extraction.
+
+    Uses a larger token budget and requests JSON output.
+    Does not change the existing generate_text() behavior.
+    """
+    import json
+
+    try:
+        response = get_client().chat.completions.create(
+            model=GROQ_MODEL,
+            messages=[
+                {
+                    "role": "system",
+                    "content": (
+                        system_prompt
+                        + "\nReturn a valid JSON object only."
+                    ),
+                },
+                {
+                    "role": "user",
+                    "content": prompt,
+                },
+            ],
+            temperature=0.1,
+            max_completion_tokens=2500,
+            response_format={"type": "json_object"},
+        )
+
+        choice = response.choices[0]
+        content = (choice.message.content or "").strip()
+
+        if not content:
+            raise RuntimeError(
+                "Groq returned empty JSON. "
+                f"finish_reason={choice.finish_reason}"
+            )
+
+        # Validate JSON before passing it to the analyzer.
+        parsed = json.loads(content)
+
+        if not isinstance(parsed, dict):
+            raise RuntimeError(
+                "Expected a JSON object from Groq."
+            )
+
+        return content
+
+    except Exception as exc:
+        raise RuntimeError(
+            f"Groq structured extraction failed: {exc}"
+        ) from exc
