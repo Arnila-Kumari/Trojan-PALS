@@ -5,7 +5,7 @@ import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
 export type Message={id:string;role:"user"|"assistant";text:string;courseIds?:string[];researchIds?:string[];reviewIds?:string[];mode?:"llm"|"matching";};
 export const welcomeMessage:Message={id:"welcome",role:"assistant",text:"Tell me what you’d like to learn. I can use your saved preferences and the course review records to help you explore your options. Supplied reviews are unverified reports, not official course information. Your account name and email are not automatically attached to model requests. Chat history lasts for this session only."};
-type User={id:string;email:string};
+type User={id:string;email:string;provider:string;providers:string[]};
 type Bootstrap={user:User;profile:Profile|null;courses:Course[];reviews:Review[];templates:ProfileTemplate[];saved:string[];savedResearch:string[];};
 type Store={profile:Profile;user:User|null;courses:Course[];reviews:Review[];templates:ProfileTemplate[];saved:string[];savedResearch:string[];messages:Message[];setMessages:React.Dispatch<React.SetStateAction<Message[]>>;ready:boolean;configured:boolean;loading:boolean;error:string;storageWarning:string;toast:(message:string)=>void;reload:()=>Promise<void>;saveProfile:(profile:Profile)=>Promise<void>;toggleSaved:(id:string)=>Promise<void>;toggleResearch:(id:string)=>Promise<void>;saveReview:(input:ReviewInput,id?:string)=>Promise<void>;deleteReview:(id:string)=>Promise<void>;signOut:()=>Promise<void>;};
 const Context=createContext<Store|null>(null);

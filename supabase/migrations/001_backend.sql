@@ -1,6 +1,31 @@
 -- Run in a NEW Supabase project's SQL Editor as the project owner.
 -- Re-running is safe for this schema. It does not delete user data.
 begin;
+create or replace function public.is_usc_user() returns boolean
+language sql stable set search_path=pg_catalog as $$
+ select coalesce(
+  ((select auth.jwt()->'app_metadata'->>'provider')='google'
+   or (select auth.jwt()->'app_metadata'->'providers') ? 'google')
+  and (select auth.jwt()->>'email') ~* '^[^@[:space:]]+@usc\.edu$',
+  false
+ );
+$$;
+revoke all on function public.is_usc_user() from public,anon;
+grant execute on function public.is_usc_user() to authenticated;
+
+create or replace function public.enforce_usc_auth_email() returns trigger
+language plpgsql set search_path=pg_catalog as $$
+begin
+ if new.email is null or new.email !~* '^[^@[:space:]]+@usc\.edu$' then
+  raise exception 'A valid @usc.edu email address is required.' using errcode='check_violation';
+ end if;
+ return new;
+end; $$;
+revoke all on function public.enforce_usc_auth_email() from public,anon,authenticated;
+drop trigger if exists enforce_edu_auth_email on auth.users;
+drop trigger if exists enforce_usc_auth_email on auth.users;
+create trigger enforce_usc_auth_email before insert or update on auth.users for each row execute function public.enforce_usc_auth_email();
+
 create table if not exists public.profiles (
  id uuid primary key references auth.users(id) on delete cascade,
  name text not null check(length(trim(name)) between 1 and 80),
@@ -113,6 +138,27 @@ create policy saved_courses_owner on public.saved_courses for all to authenticat
 drop policy if exists saved_research_owner on public.saved_research;
 create policy saved_research_owner on public.saved_research for all to authenticated using((select auth.uid())=user_id) with check((select auth.uid())=user_id);
 
+drop policy if exists edu_email_required on public.profiles;
+drop policy if exists usc_email_required on public.profiles;
+create policy usc_email_required on public.profiles as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop policy if exists edu_email_required on public.profile_templates;
+drop policy if exists usc_email_required on public.profile_templates;
+create policy usc_email_required on public.profile_templates as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop policy if exists edu_email_required on public.courses;
+drop policy if exists usc_email_required on public.courses;
+create policy usc_email_required on public.courses as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop policy if exists edu_email_required on public.course_reviews;
+drop policy if exists usc_email_required on public.course_reviews;
+create policy usc_email_required on public.course_reviews as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop policy if exists edu_email_required on public.saved_courses;
+drop policy if exists usc_email_required on public.saved_courses;
+create policy usc_email_required on public.saved_courses as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop policy if exists edu_email_required on public.saved_research;
+drop policy if exists usc_email_required on public.saved_research;
+create policy usc_email_required on public.saved_research as restrictive for all to authenticated using((select public.is_usc_user())) with check((select public.is_usc_user()));
+drop function if exists public.is_edu_user();
+drop function if exists public.enforce_edu_auth_email();
+
 -- No API role can read/write this table directly. The function uses auth.uid(),
 -- accepts no user ID, and returns only whether the caller has quota remaining.
 create table if not exists public.chat_limits (
@@ -127,7 +173,7 @@ create or replace function public.consume_chat_quota() returns boolean
 language plpgsql security definer set search_path=pg_catalog,public as $$
 declare caller uuid:=auth.uid(); n integer;
 begin
- if caller is null then return false; end if;
+ if caller is null or not public.is_usc_user() then return false; end if;
  insert into public.chat_limits(user_id,period,bucket,count) values(caller,'minute',date_trunc('minute',now()),1)
  on conflict(user_id,period,bucket) do update set count=chat_limits.count+1 where chat_limits.count<12 returning count into n;
  if n is null then return false; end if;

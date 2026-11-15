@@ -6,11 +6,20 @@ import { CourseRow, mapCourse, mapReview, mapTemplate, profileToRow } from "../l
 import { buildChatContext, matchingReply, validateModelReply } from "../lib/chat-context";
 import { InputError, validateProfile, validateReview } from "../lib/validation";
 import { rankCourses } from "../lib/data";
+import { isUscEmail } from "../lib/usc-email";
 const row:CourseRow={code:"CSCI 544",slug:"csci-544",title:"Applied Natural Language Processing",description:"Supplied title",tags:["Natural Language Processing","Machine Learning"],units:null,weekly_hours:null,assessment_format:"Unknown",level:"Unknown",prerequisite_codes:[],prerequisites_verified:false,official_source_url:null};
 const second:CourseRow={...row,code:"CSCI 556",slug:"csci-556",title:"Introduction to Cryptography",tags:["Cybersecurity"]};
 const review:Review={id:"r1",courseCode:"CSCI 544",semester:"Fall 2026",instructor:"Reported instructor",difficulty:4,assessments:"Projects and presentations",workload:"Moderately demanding",weeklyHours:null,format:"Unknown",grade:"A-",advice:"Start early",sourceKind:"imported",sourceLabel:"Supplied, unverified",sourceFile:"message.txt",sourceRow:1,createdAt:"2026-11-14T00:00:00Z",canEdit:false};
 const catalog=[mapCourse(row,[review]),mapCourse(second,[])];
 const profile:Profile={...defaultProfile,name:"Private Name",program:"Computer Science",interests:["Natural Language Processing"],goal:"Explore research",onboardingComplete:true};
+test("USC email validation accepts only exact usc.edu domains",()=>{
+ assert.equal(isUscEmail("student@usc.edu"),true);
+ assert.equal(isUscEmail("STUDENT@USC.EDU"),true);
+ assert.equal(isUscEmail("student@dept.usc.edu"),false);
+ assert.equal(isUscEmail("student@university.edu"),false);
+ assert.equal(isUscEmail("student@usc.edu.example.com"),false);
+ assert.equal(isUscEmail("student@usc.edu."),false);
+});
 test("unknown hours and syllabus facts stay unknown instead of using old mock values",()=>{
  const course=mapCourse(row,[review]);assert.equal(course.hours,null);assert.equal(course.units,null);assert.equal(course.format,"Unknown");assert.deepEqual(course.assessment,[]);assert.equal(course.prerequisitesVerified,false);
 });

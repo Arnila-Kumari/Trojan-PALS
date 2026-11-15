@@ -6,7 +6,7 @@ import "./globals.css";
 import "./backend.css";
 
 export const metadata: Metadata = {
-  title: "TrojanPals — Make your next move",
+  title: "TrojanPALS — Make your next move",
   description: "Explore courses, discover research, and build your own academic path. USC hackathon frontend prototype.",
 };
 

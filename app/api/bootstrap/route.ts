@@ -14,5 +14,6 @@ export async function GET(){try{
   responses.forEach(result=>checkDatabase(result.error));
   const [p,c,r,t,s,sr]=responses;
   const reviews=(r.data as ReviewRow[]).map(row=>mapReview(row,user.id));
-  return json({user:{id:user.id,email:user.email??""},profile:p.data?mapProfile(p.data as ProfileRow):null,courses:(c.data as CourseRow[]).map(row=>mapCourse(row,reviews)),reviews,templates:(t.data as TemplateRow[]).map(mapTemplate),saved:(s.data as {course_code:string}[]).map(row=>row.course_code),savedResearch:(sr.data as {research_id:string}[]).map(row=>row.research_id),reviewLimit:1000});
+  const providers=Array.isArray(user.app_metadata.providers)?user.app_metadata.providers.filter((provider):provider is string=>typeof provider==="string"):[];
+  return json({user:{id:user.id,email:user.email??"",provider:typeof user.app_metadata.provider==="string"?user.app_metadata.provider:"",providers},profile:p.data?mapProfile(p.data as ProfileRow):null,courses:(c.data as CourseRow[]).map(row=>mapCourse(row,reviews)),reviews,templates:(t.data as TemplateRow[]).map(mapTemplate),saved:(s.data as {course_code:string}[]).map(row=>row.course_code),savedResearch:(sr.data as {research_id:string}[]).map(row=>row.research_id),reviewLimit:1000});
 }catch(error){return fail(error);}}
