@@ -61,4 +61,238 @@ Roadmaps include:
 4. **Get involved:** Explore research enrollment pathways and departmental opportunities.
 5. **Keep going:** Track progress and consider alternative research connections.
 
-Students can save roadmaps and track completed
+Students can save roadmaps and track completed steps.
+
+### 5. AI Research Readiness Analyzer
+
+Our Research Readiness Analyzer helps students understand how their existing academic background connects to a professor's published research.
+
+**How it works:**
+
+1. Retrieves eligible research-paper abstracts associated with a selected professor.
+2. Uses an LLM to extract technical research methods supported by the abstracts.
+3. Identifies broader foundational topics relevant to those methods.
+4. Compares the extracted skills with the student's self-reported background.
+5. Uses semantic similarity to identify potentially relevant USC preparation courses.
+6. Excludes completed courses and provides links to supporting publications.
+
+**Example:**
+
+A student interested in conversational AI may discover preparation areas such as language-model fine-tuning, statistical machine learning, dialogue embeddings, and model evaluation.
+
+The analyzer distinguishes explicitly reported skills, related foundations, and skills not confirmed by the profile.
+
+These are preparation suggestions, not verified skill deficiencies or official laboratory admission requirements.
+
+### 6. Student Profiles and Reviews
+
+Trojan PALS supports personalized accounts through Supabase.
+
+- Google authentication
+- Student profile onboarding and editing
+- Saved interests and completed courses
+- Persistent course reviews and saved courses
+- Saved research roadmaps
+- Profile-aware AI recommendations
+
+Student-submitted reviews and imported sample records are distinguished from official academic information.
+
+---
+
+## AI and System Architecture
+
+Trojan PALS combines semantic retrieval, structured LLM extraction, recommendation logic, and evidence-grounded research guidance.
+
+| Component | Technology | Purpose |
+|---|---|---|
+| Frontend | Next.js, React, TypeScript | User interface and application routing |
+| Authentication and database | Supabase, PostgreSQL | Accounts, profiles, reviews, and saved data |
+| Backend | Python, FastAPI | AI services and recommendation endpoints |
+| LLM | Groq API | Conversational guidance and structured research extraction |
+| Semantic matching | Sentence Transformers | Course and research-skill similarity |
+| Research matching | TF-IDF, scikit-learn | Researcher discovery and topic matching |
+| Research publications | OpenAlex | Publication metadata and abstracts |
+| Academic information | USC course and faculty resources | Course preparation and research context |
+
+### Research Readiness Pipeline
+
+```text
+Student Profile + Research Interest
+                |
+                v
+        Researcher Discovery
+                |
+                v
+       Research Paper Retrieval
+                |
+                v
+      Groq Research Method Extraction
+                |
+                v
+       Evidence Quote Validation
+                |
+                v
+      Student Skill Comparison
+                |
+                v
+      Semantic USC Course Matching
+                |
+                v
+     Personalized Research Readiness
+```
+
+Research methods must be supported by supplied paper abstracts. Records with unresolved author-attribution warnings are excluded from readiness extraction.
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 22+
+- Python 3.11+
+- npm
+- Supabase project with Google OAuth configured
+- Groq API key
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/Arnila-Kumari/Trojan-PALS.git
+cd Trojan-PALS
+```
+
+### 2. Install Frontend Dependencies
+
+```bash
+npm install
+```
+
+### 3. Set Up the Python Backend
+
+```bash
+cd backend
+python3.11 -m venv .venv
+source .venv/bin/activate
+python -m pip install -r requirements.txt
+```
+
+Create `backend/.env`:
+
+```dotenv
+GROQ_API_KEY=your_groq_api_key
+GROQ_MODEL=openai/gpt-oss-20b
+```
+
+Use a Groq model available to your API account.
+
+### 4. Configure Supabase and Frontend Environment
+
+Follow [BACKEND_SETUP.md](BACKEND_SETUP.md) to configure Supabase, Google OAuth, database migrations, and seed data.
+
+Create `.env.local` in the repository root:
+
+```dotenv
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=your_supabase_publishable_key
+FASTAPI_INTERNAL_URL=http://127.0.0.1:8000
+```
+
+Never commit API keys, database secrets, or local environment files.
+
+### 5. Start the Backend
+
+From `backend/`:
+
+```bash
+python -m uvicorn app.main:app --reload
+```
+
+FastAPI documentation is available at:
+
+`http://127.0.0.1:8000/docs`
+
+### 6. Start the Frontend
+
+From the repository root, in another terminal:
+
+```bash
+npm run dev
+```
+
+Open:
+
+`http://localhost:3000`
+
+Use `localhost` consistently when testing Google authentication.
+
+---
+
+## Testing
+
+### Frontend
+
+```bash
+npm test
+npm run build
+```
+
+### Backend
+
+```bash
+cd backend
+python -m pytest -q
+```
+
+### AI API Endpoints
+
+| Endpoint | Function |
+|---|---|
+| `POST /recommend` | Personalized course recommendations |
+| `POST /chat` | Course recommendation chatbot |
+| `POST /chat/route` | Unified academic and research chatbot |
+| `POST /roadmap` | Professor-specific research roadmap |
+| `POST /research/match` | Researcher matching and research pathways |
+| `POST /research/readiness` | AI-powered research skill-gap analysis |
+
+The frontend uses authenticated Next.js API routes to communicate with the Python services.
+
+---
+
+## Data Sources and Responsible AI
+
+Trojan PALS combines official academic sources, research metadata, and student-contributed information.
+
+- **USC:** Course catalog, schedule, faculty profiles, and laboratory information
+- **OpenAlex:** Research publication metadata and abstracts
+- **Student reviews:** Imported examples and authenticated student contributions
+- **Student profiles:** Saved preferences and self-reported academic background
+
+**Important limitations:**
+
+- Course recommendations are advisory and do not guarantee enrollment, grades, or eligibility.
+- Course availability, prerequisites, and instructor assignments should be confirmed through official USC resources.
+- Research similarity does not imply an available laboratory position.
+- Research-paper attribution may require manual verification.
+- Extracted research methods are evidence-grounded, but broader preparation topics and course matches are AI-generated suggestions.
+- Completed coursework does not automatically establish mastery of every related skill.
+- Synthetic student examples are not real, contactable mentors.
+
+---
+
+## Future Improvements
+
+- More comprehensive, verified publication coverage
+- Improved semantic researcher discovery
+- Expanded student skill profiles
+- More detailed research readiness visualizations
+- Additional evaluation of course-to-skill relevance
+- Production deployment and scalability improvements
+
+---
+
+## Project Repository
+
+[GitHub — Trojan PALS](https://github.com/Arnila-Kumari/Trojan-PALS)
+
+**Trojan PALS — Discover courses. Explore research. Build your path.**
