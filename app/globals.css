@@ -93,3 +93,8 @@
 .saved-chat>button:first-child{flex:1;min-width:0;display:grid;grid-template-columns:auto 1fr;column-gap:8px;align-items:center;border:0;background:transparent;padding:10px 12px;text-align:left;cursor:pointer;color:inherit;font-size:12px}
 .saved-chat>button:first-child span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .saved-chat small{grid-column:2;font-size:10px;color:#9a9585}
+
+/* "Discuss this roadmap with AI" */
+.rm-discuss-btn{display:inline-flex;align-items:center;gap:9px;margin:2px 0 14px;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:500;color:#5e0f1d;background:#fff;border:1.5px solid #8a1b31;text-decoration:none;box-shadow:0 4px 14px #5e0f1d1a;transition:background .15s ease,transform .15s ease}
+.rm-discuss-btn:hover{background:#fbefed;transform:translateY(-1px)}
+.rm-discuss-btn svg:first-child{color:#8a1b31}

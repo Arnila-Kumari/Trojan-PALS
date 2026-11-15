@@ -24,6 +24,10 @@ export function ResearchPage() {
   const [email, setEmail] = useState("");
   const [copied, setCopied] = useState(false);
   const inflight = useRef<AbortController | null>(null);
+  // Saved interests become a grey example, not pre-typed text. Searching with an empty box uses it.
+  const suggestion = profile.interests.length
+    ? `${profile.interests.slice(0, 2).join(" and ")} research`
+    : "NLP applications in healthcare";
   const [saved, setSaved] = useState<SavedRoadmap[]>([]);   // up to 3 roadmaps on this profile
   const [maxSaved, setMaxSaved] = useState(3);
   const [activeId, setActiveId] = useState<string | null>(null);
@@ -52,7 +56,6 @@ export function ResearchPage() {
 
   useEffect(() => {   // start from the student's saved interests
     if (fromChat.current) return;   // the chat link wins over saved interests
-    if (!query && profile.interests.length) setQuery(`${profile.interests.join(" and ")} research`);
     if (profile.level === "Undergraduate") setLevel("Undergraduate");   // profile from Supabase login
     const r = profile.research;   // prior research the student saved on their profile
     if (r && !background) setBackground([r.research_topic, r.lab_work].filter(Boolean).join(". "));
@@ -73,8 +76,9 @@ export function ResearchPage() {
   async function run(e?: React.FormEvent, qOverride?: string, levelOverride?: (typeof LEVELS)[number]) {
     e?.preventDefault();
     if (e) setActiveId(null);   // a new search is a new, unsaved roadmap
-    const q = (qOverride ?? query).trim(), lvl = levelOverride ?? level;
+    const q = (qOverride ?? (query.trim() || suggestion)).trim(), lvl = levelOverride ?? level;
     if (q.length < 2) return;
+    if (!qOverride && !query.trim()) setQuery(q);   // show what was searched
     inflight.current?.abort();
     const ctrl = new AbortController();
     inflight.current = ctrl;
@@ -141,6 +145,14 @@ export function ResearchPage() {
 
   const rm = result?.roadmap;
   const stepId = (stage: string, i: number) => `${result?.query}|${rm?.target?.professor}|${stage}|${i}`;
+  // Question the AI companion receives when the student clicks "Discuss this roadmap".
+  const discussPrompt = rm ? [
+    `I'm a ${level} student. Help me with my research roadmap for ${result?.interests.length ? result.interests.join(" and ") : result?.query} research`
+      + (rm.target ? ` toward ${rm.target.professor}` : "") + ".",
+    rm.backup_targets.length ? `Backup researchers: ${rm.backup_targets.join(", ")}.` : "",
+    `My roadmap steps: ${rm.stages.map(st => st.title).join(", ")}.`,
+    "Which researcher and lab should I contact first, what should I prepare, and what should my first email say?",
+  ].filter(Boolean).join(" ") : "";
   const totalSteps = rm?.stages.reduce((n, s) => n + s.steps.length, 0) ?? 0;
   const doneSteps = rm?.stages.reduce((n, s) => n + s.steps.filter((_, i) => done.includes(stepId(s.id, i))).length, 0) ?? 0;
 
@@ -162,7 +174,7 @@ export function ResearchPage() {
     <form className="panel rm-form" onSubmit={run}>
       <label className="rm-label">What research are you curious about?
         <textarea value={query} onChange={e => setQuery(e.target.value)} rows={2} maxLength={1000}
-          placeholder="e.g. NLP applications in healthcare" aria-label="Research interest" />
+          placeholder={`e.g. ${suggestion}`} aria-label="Research interest" />
       </label>
       <div className="rm-row">
         <label className="rm-label">Level
@@ -175,7 +187,7 @@ export function ResearchPage() {
             placeholder="e.g. I built an EEG-based depression detection model" />
         </label>
       </div>
-      <button className="btn primary" type="submit" disabled={loading || query.trim().length < 2}>
+      <button className="btn primary" type="submit" disabled={loading}>
         <Icon name="search" size={15} />{loading ? "Matching…" : "Find researchers & my roadmap"}
       </button>
     </form>
@@ -214,6 +226,8 @@ export function ResearchPage() {
           <div className="section-heading"><div className="section-title"><span className="spark-tile"><Icon name="target" size={18} /></span>
             <h2>Your roadmap{rm.target ? ` to ${rm.target.professor}` : ""}</h2></div>
             <span className="count-pill">{doneSteps}/{totalSteps} done</span></div>
+          <Link className="rm-discuss-btn" href={`/chat?ask=${encodeURIComponent(discussPrompt)}`}>
+            <Icon name="chat" size={15} />Discuss this roadmap with AI<Icon name="arrow" size={14} /></Link>
           <div className="rm-save-row">
             {activeId ? <span className="rm-small"><Icon name="check" size={13} /> Saved to your profile. Progress is saved as you tick steps.</span>
               : <button type="button" className="rm-save-btn" onClick={() => void saveRoadmap()} disabled={saving || saved.length >= maxSaved}>

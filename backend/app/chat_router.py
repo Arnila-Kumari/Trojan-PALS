@@ -241,7 +241,9 @@ def route_chat(
 
     # RESEARCH DISCOVERY: retrieve sourced matches, then let Groq explain them (RAG).
     # Also used when the student asks for a roadmap without naming a professor.
-    if intent == "research" or not professor:
+    # A message that names a research topic (e.g. "Discuss this roadmap" from the Research page)
+    # is answered from our sourced USC data, even if it also names a professor.
+    if intent == "research" or not professor or new_topic:
         return research_chat(message, request)
 
     # ROADMAP WORKFLOW
@@ -308,7 +310,8 @@ RESEARCH_SYSTEM = """You are Trojan PALS, a USC research advisor for students.
 Answer the student's question using ONLY the EVIDENCE below.
 - Recommend at most 3 researchers. For each: name, department, and one sentence on why they fit,
   citing the evidence (a lab, paper, or course) exactly as written.
-- Then give the student's first 2 concrete next steps from the roadmap.
+- Then give the student's first 2 concrete next steps from the roadmap. If the student asks what to
+  prepare or what to write in an email, answer that too, using only the evidence and what the student said.
 - Never invent papers, labs, openings, funding, or numbers. If evidence is thin, say so.
 - Under 180 words, friendly, no markdown tables."""
 

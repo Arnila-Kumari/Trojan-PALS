@@ -21,6 +21,12 @@ export function ChatPage(){
  function openChat(c:SavedChat){if(busy)return;setMessages(c.messages);setActiveChat(c.id);lastSynced.current=`${c.id}:${c.messages.length}`;setError("");setChatNote("");}
  async function removeChat(c:SavedChat){try{await api("/api/chats","DELETE",{id:c.id});setSavedChats(list=>list.filter(x=>x.id!==c.id));if(activeChat===c.id)setActiveChat(null);setChatNote("Saved chat removed.");}catch(err){setChatNote((err as Error).message);}};
  useEffect(()=>{mounted.current=true;setContextSlug(new URLSearchParams(window.location.search).get("course")??undefined);return()=>{mounted.current=false;};},[]);
+ const asked=useRef(false);
+ useEffect(()=>{   // opened from "Discuss this roadmap" on the Research page: /chat?ask=...
+  if(asked.current)return;const q=new URLSearchParams(window.location.search).get("ask");if(!q)return;asked.current=true;
+  window.history.replaceState(null,"","/chat");setMessages([welcomeMessage]);setActiveChat(null);setTimeout(()=>void send(q.slice(0,1500)),0);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[]);
  useEffect(()=>{bottom.current?.scrollIntoView({behavior:"smooth",block:"nearest"});},[messages,busy]);
  const context=courses.find(c=>c.slug===contextSlug);
  async function send(text:string){const value=text.trim();if(!value||pending.current)return;pending.current=true;setBusy(true);setError("");setInput("");const id=crypto.randomUUID();const history=messages.filter(m=>m.id!=="welcome").slice(-8).map(m=>({role:m.role,text:m.text.slice(0,3000)}));setMessages(previous=>[...previous,{id:`user-${id}`,role:"user",text:value}]);try{
