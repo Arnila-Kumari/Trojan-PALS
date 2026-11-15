@@ -39,11 +39,43 @@ def _parse_json(raw: str) -> dict:
 
 
 def _extract_methods(papers: List[dict], generate: Callable[[str, str], str]) -> List[dict]:
-    system = ("Extract technical methods explicitly supported by the supplied paper abstracts. "
-              "Return ONLY JSON: {\"methods\":[{\"skill\":\"...\",\"paper_title\":\"...\","
-              "\"evidence_quote\":\"exact short substring from abstract\"}]}. "
-              "Do not infer lab admission requirements or invent methods. At most 8 methods.")
+    
+    system = """
+    You are analyzing scientific research papers to identify
+    transferable research skills and academic foundations.
+
+    Return ONLY a valid JSON object in this format:
+
+    {
+    "methods": [
+        {
+        "skill": "Specific research technique",
+        "foundational_topic": "Broader academic subject",
+        "paper_title": "Exact supplied paper title",
+        "evidence_quote": "Exact substring from the abstract"
+        }
+    ]
+    }
+
+    Rules:
+    1. Extract at most 6 distinct research methods.
+    2. Skills must be supported by the supplied abstracts.
+    3. Each evidence_quote must appear exactly in its abstract.
+    4. Identify a broader foundational_topic that could help
+    a student understand or learn the method.
+    5. Examples of foundational topics include:
+    statistical machine learning, natural language processing,
+    representation learning, deep learning, computer vision,
+    speech processing, and data visualization.
+    6. Do not use product or model names alone as skills.
+    7. Do not invent research methods, course coverage,
+    prerequisites, or lab admission requirements.
+    8. A foundational topic is a suggested preparation area,
+    not a verified requirement of the research lab.
+    9. Return only JSON, without Markdown formatting.
+    """
     raw = generate(json.dumps(papers, ensure_ascii=False), system)
+    print("RAW GROQ EXTRACTION:", repr(raw[:2000]), flush=True)
     proposed = _parse_json(raw).get("methods", [])
     indexed = {p["paper_title"]: p for p in papers}
     output, seen = [], set()
@@ -62,33 +94,144 @@ def _extract_methods(papers: List[dict], generate: Callable[[str, str], str]) ->
         if key in seen:
             continue
         seen.add(key)
-        output.append({"skill": skill, "paper_title": title, "evidence_quote": quote, "source_url": paper["link"]})
+        foundation = str(
+            item.get("foundational_topic") or ""
+        ).strip()[:120]
+
+        output.append({
+            "skill": skill,
+            "foundational_topic": foundation or skill,
+            "paper_title": title,
+            "evidence_quote": quote,
+            "source_url": paper["link"],
+        })
         if len(output) == 8:
             break
     return output
 
+def _course_matches(
+    skill: str,
+    courses: List[dict],
+    completed: set,
+    limit: int = 2,
+) -> List[dict]:
+    """Find academically relevant courses using semantic similarity."""
 
-def _course_matches(skill: str, courses: List[dict], completed: set, limit: int = 2) -> List[dict]:
-    stop = {"the", "and", "with", "for", "from", "using", "based", "methods", "learning"}
-    target = _terms(skill) - stop
-    ranked = []
+    from functools import lru_cache
+    from sentence_transformers import SentenceTransformer
+    from sentence_transformers import util
+
+    @lru_cache(maxsize=1)
+    def get_model():
+        return SentenceTransformer("all-MiniLM-L6-v2")
+
+    candidates = []
+
     for course in courses:
-        cid = str(course.get("course_id") or course.get("id") or "")
+        cid = str(
+            course.get("course_id")
+            or course.get("id")
+            or ""
+        )
+
         if not cid or _code(cid) in completed:
             continue
-        title = str(course.get("course_title") or course.get("title") or "")
-        description = str(course.get("description") or "")
-        topics = str(course.get("topics") or "")
-        matched = target & (_terms(title + " " + description + " " + topics) - stop)
-        if not matched:
-            continue
-        score = len(matched) + 0.5 * len(target & _terms(title))
-        ranked.append((score, {"course_id": cid, "course_title": title,
-                               "reason": "Catalog text mentions: " + ", ".join(sorted(matched)),
-                               "source_url": course.get("source_url") or course.get("official_source_url") or ""}))
-    ranked.sort(key=lambda x: (-x[0], x[1]["course_id"]))
-    return [x[1] for x in ranked[:limit]]
 
+        title = str(
+            course.get("course_title")
+            or course.get("title")
+            or ""
+        )
+
+        description = str(
+            course.get("description")
+            or ""
+        )
+
+        topics = str(course.get("topics") or "")
+
+        if not title:
+            continue
+
+        candidates.append({
+            "course_id": cid,
+            "course_title": title,
+            "text": (
+                f"{title}. {title}. "
+                f"{description}. {topics}"
+            ),
+            "source_url": (
+                course.get("source_url")
+                or course.get("official_source_url")
+                or ""
+            ),
+        })
+
+    if not candidates:
+        return []
+
+    model = get_model()
+
+    skill_embedding = model.encode(
+        skill,
+        convert_to_tensor=True,
+    )
+
+    course_embeddings = model.encode(
+        [c["text"] for c in candidates],
+        convert_to_tensor=True,
+    )
+
+    similarities = util.cos_sim(
+        skill_embedding,
+        course_embeddings,
+    )[0]
+
+    ranked = []
+
+    for i, course in enumerate(candidates):
+        similarity = float(similarities[i])
+
+        # Conservative relevance threshold.
+        if similarity < 0.42:
+            continue
+
+        level_match = re.search(
+            r"(\d{3})",
+            course["course_id"]
+        )
+
+        level_bonus = 0.0
+
+        if level_match:
+            level = int(level_match.group(1)) // 100
+
+            level_bonus = {
+                5: 0.025,
+                6: 0.015,
+                4: 0.005,
+            }.get(level, 0.0)
+
+        ranked.append((
+            similarity + level_bonus,
+            similarity,
+            course,
+        ))
+
+    ranked.sort(key=lambda x: -x[0])
+
+    return [
+        {
+            "course_id": course["course_id"],
+            "course_title": course["course_title"],
+            "reason": (
+                "Course content is semantically related "
+                "to this research method."
+            ),
+            "source_url": course["source_url"],
+        }
+        for _, _, course in ranked[:limit]
+    ]
 
 def generate_skill_gap_analysis(
     student: Dict[str, Any],
@@ -121,16 +264,62 @@ def generate_skill_gap_analysis(
         base["notes"].append("Method extraction unavailable: " + type(exc).__name__)
         return base
     known = {s.casefold().strip() for s in skills}
+    def has_related_foundation(
+        foundation: str,
+        known_skills: set,
+    ) -> bool:
+        """Detect broad, explicitly reported academic foundations."""
+
+        aliases = {
+            "machine learning": {
+                "machine learning", "ml",
+            },
+            "deep learning": {
+                "deep learning", "neural networks",
+            },
+            "natural language processing": {
+                "natural language processing", "nlp",
+            },
+            "statistics": {
+                "statistics", "statistical modeling",
+            },
+            "computer vision": {
+                "computer vision", "image processing",
+            },
+            "data visualization": {
+                "data visualization", "visualization",
+            },
+        }
+
+        foundation_text = foundation.casefold()
+
+        for topic, terms in aliases.items():
+            if topic in foundation_text:
+                if known_skills & terms:
+                    return True
+
+        return False
     for method in methods:
         skill = method["skill"]
+        foundation = method.get("foundational_topic") or ""
         if skill.casefold().strip() in known:
             status = "self_reported"
+        elif has_related_foundation(foundation, known):
+            status = "related_foundation"
         else:
             status = "not_confirmed_in_profile"
         base["suggested_preparation"].append({
             **method,
             "status": status,
-            "courses": [] if status == "self_reported" else _course_matches(skill, courses, completed),
+            "courses": (
+                []
+                if status == "self_reported"
+                else _course_matches(
+                    method.get("foundational_topic") or skill,
+                    courses,
+                    completed,
+                )
+            ),
         })
     base["notes"].append("Unlisted skills are not proven gaps; course matches are preparation suggestions, not prerequisites.")
     return base

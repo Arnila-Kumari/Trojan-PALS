@@ -281,12 +281,18 @@ export async function POST(request: Request) {
 
     // 10. Return the exact response format
     // expected by your teammate's chat UI.
+    // Research questions with a clear topic come back with a ready roadmap link.
+    const link = result.roadmap?.research_link;
+    const roadmapLink =
+      typeof link === "string" && link.startsWith("/research?") ? link : undefined;
+
     return json({
       text: result.reply,
       courseIds,
       researchIds: [],
       reviewIds: [],
       mode: "llm",
+      roadmapLink,
     });
   } catch (error) {
     return fail(error);

@@ -1,0 +1,58 @@
+professor,course_id,course_title,term,source_url
+Andrew Goodney,CSCI-102,Introduction to Programming,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Mark Redekopp,CSCI-103,Object Oriented Programming,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Mark Redekopp,CSCI-113,Programming Fundamentals for Computing,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Aaron Cote,CSCI-270,Introduction to Algorithms and Theory of Computing,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+William G.J. Halfond,CSCI-310,Software Engineering,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Tatyana Ryutov,CSCI-350,Fundamentals of Operating Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Bill Cheng,CSCI-353,Internetworking,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Andrew Goodney,CSCI-356,Computer Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Victor Adamchik,CSCI-401,Capstone: Design and Construction of Large Software Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Bill Cheng,CSCI-402,Operating Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jernej Barbic,CSCI-420,Computer Graphics,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Leana Golubchik,CSCI-450,Foundations of Computer Networks,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Bill Cheng,CSCI-455,Introduction to Programming Systems Design,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Aaron Cote,CSCI-475,Theory of Computation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jiapeng Zhang,CSCI-476,Cryptography: Secure Communication and Computation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+William G.J. Halfond,CSCI-490,Directed Research,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jernej Barbic,CSCI-520,Computer Animation and Simulation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Tatyana Ryutov,CSCI-531,Applied Cryptography,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Clifford Neuman,CSCI-532,Innovation for Defense Applications,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Heather Culbertson,CSCI-538,"Augmented, Virtual and Mixed Reality",Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Barath Raghavan,CSCI-551,Computer Networking,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Wei-Min Shen,CSCI-561,Foundations of Artificial Intelligence,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Victor Adamchik,CSCI-567,Machine Learning,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Saty Raghavachary,CSCI-572,Information Retrieval and Web Search Engines,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Ming-Deh A. Huang,CSCI-575,Quantum Computing and Quantum Cryptography,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Saty Raghavachary,CSCI-580,3-D Graphics and Rendering,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Saty Raghavachary,CSCI-585,Database Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Cyrus Shahabi,CSCI-587,Geospatial Data Analysis,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jyotirmoy Deshmukh,CSCI-590,Directed Research,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Nenad Medvidovic,CSCI-591,Computer Science Research Colloquium,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jyotirmoy Deshmukh,CSCI-594A,Master's Thesis,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jyotirmoy Deshmukh,CSCI-594B,Master's Thesis,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Jyotirmoy Deshmukh,CSCI-594Z,Master's Thesis,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Bistra Dilkina,CSCI-617,Machine Learning for/with Mixed-Integer Optimization,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Mukund Raghothaman,CSCI-625,Program Synthesis and Computer-Aided Verification,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+David Traum,CSCI-644,Natural Language Dialogue Systems,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Barath Raghavan,CSCI-651,Advanced Computer Networking,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Barath Raghavan,CSCI-654,Crafting a Research Agenda,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Ramesh Govindan,CSCI-656,Networked Systems in Cloud Computing,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+David Kempe,CSCI-670,Advanced Analysis of Algorithms,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+David Kempe,CSCI-672,Approximation Algorithms,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Maja Matarić,CSCI-697,Seminar in Computer Science Research,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-790,Research,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-794A,Doctoral Dissertation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-794B,Doctoral Dissertation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-794C,Doctoral Dissertation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-794D,Doctoral Dissertation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Emilio Ferrara,CSCI-794Z,Doctoral Dissertation,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/CSCI
+Wensheng Wu,DSCI-510,Principles of Programming for Data Science,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Tatyana Ryutov,DSCI-525,"Trusted System Design, Analysis and Development",Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Clifford Neuman,DSCI-529,Security and Privacy,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Andrew Gordon,DSCI-531,Fairness in Artificial Intelligence,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+John Heidemann,DSCI-533,Machine Learning for a Secure Internet,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Wensheng Wu,DSCI-549,Introduction to Computational Thinking and Data Science,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Wensheng Wu,DSCI-551,Foundations of Data Management,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Wei-Min Shen,DSCI-553,Foundations and Applications of Data Mining,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
+Jyotirmoy Deshmukh,DSCI-590,Directed Research,Spring 2027,https://classes.usc.edu/term/20271/catalogue/school/ENGV/program/DSCI
