@@ -67,6 +67,54 @@ class Data:
         return r.iloc[0].to_dict() if len(r) else None
 
 
+CS_WORDS = re.compile(r"learn|neural|language|data|algorithm|network|model|comput|robot|speech|signal|vision|"
+                      r"secur|software|graph|optimi|system|intelligen|agent|privacy|program|image|video", re.I)
+
+
+def _same_person(prof: str, used: str) -> bool:
+    """Same last name and same first initial, ignoring accents and middle names."""
+    a, b = person_key(prof).split(), person_key(used).split()
+    if not (a and b) or a[-1] != b[-1]:
+        return False
+    f1, f2 = a[0], b[0]
+    nick = {"bill": "william", "will": "william", "bob": "robert", "rob": "robert", "jim": "james",
+            "mike": "michael", "dave": "david", "tom": "thomas", "saty": "sathyanarayana", "shri": "shrikanth"}
+    return (f1 == f2 or len(f1) == 1 or len(f2) == 1 or f1[:3] == f2[:3]
+            or nick.get(f1) == f2 or nick.get(f2) == f1
+            or f1 in b or f2 in a)   # e.g. 'Shrikanth Shri Narayanan'
+
+
+
+def check_papers(papers: pd.DataFrame, review: pd.DataFrame, faculty: pd.DataFrame) -> tuple[pd.DataFrame, list[dict]]:
+    """Drop papers whose OpenAlex author is probably not our professor.
+
+    REVIEW rows say which author record was used ("Used A123 = 'Name' (n works)"). We drop a
+    professor's papers when (1) that name isn't the same person, or (2) for a computing faculty
+    member, none of the papers look like computing research (a namesake in another field)."""
+    if papers.empty or review.empty or "detail" not in review:
+        return papers, []
+    dept = dict(zip(faculty.get("professor", []), faculty.get("department", [])))
+    dropped = []
+    for r in review[review.get("status", "") == "REVIEW"].itertuples(index=False):
+        prof = r.professor
+        m = re.search(r"=\s*'([^']+)'", str(r.detail))
+        used = m.group(1) if m else ""
+        mine = papers[papers["professor"] == prof]
+        if mine.empty:
+            continue
+        reason = ""
+        if used and not _same_person(prof, used):
+            reason = f"matched a different person: {used}"
+        elif any(x in str(dept.get(prof, "")) for x in ("CS", "ECE", "ICT", "ISE")):
+            text = " ".join(mine.get("paper_title", "") + " " + mine.get("topics", "") + " " + mine.get("abstract", ""))
+            if not CS_WORDS.search(text):
+                reason = "papers don't look like computing research (likely a namesake)"
+        if reason:
+            dropped.append({"professor": prof, "papers": len(mine), "reason": reason})
+            papers = papers[papers["professor"] != prof]
+    return papers, dropped
+
+
 def _read(p: Path, required=True) -> pd.DataFrame:
     if not p.exists():
         if required:
@@ -87,6 +135,8 @@ def load(folder: str | Path | None = None) -> Data:
     papers = _read(d / "papers.csv", required=False)
     if papers.empty:
         papers = pd.DataFrame(columns=["professor", "paper_title", "year", "link", "summary", "abstract"])
+    else:   # never show another person's papers: drop uncertain OpenAlex matches that look wrong
+        papers, _ = check_papers(papers, _read(d / "review.csv", required=False), _read(d / "research_mentors.csv"))
     exps = []
     if (d / "lab_experiences.jsonl").exists():
         for line in (d / "lab_experiences.jsonl").read_text(encoding="utf-8").splitlines():

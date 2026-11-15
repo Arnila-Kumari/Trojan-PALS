@@ -1,0 +1,54 @@
+professor,status,detail
+Victor Adamchik,NOT_FOUND,No USC-affiliated OpenAlex author matched. Find the ID on openalex.org and add openalex_id.
+Len Adleman,NO_RECENT,no papers since 2023-01-01
+Jose Luis Ambite,REVIEW,Used A5033175043 = 'José Luis Ambite' (183 works). Other candidates: A5080317846 (27 works)
+Souti Rini Chattopadhyay,REVIEW,"Used A5024795758 = 'Swapan Chattopadhyay' (348 works). Other candidates: A5059243154 (50 works), A5016554974 (2 works)"
+Bill Cheng,REVIEW,"Used A5000234334 = 'Yucheng Wu' (1156 works). Other candidates: A5100416989 (442 works), A5075691677 (360 works), A5086942818 (273 works)"
+Aaron Cote,NOT_FOUND,No USC-affiliated OpenAlex author matched. Find the ID on openalex.org and add openalex_id.
+Antonio Damasio,REVIEW,Used A5070506273 = 'António R. Damásio' (368 works). Other candidates: A5063949848 (9 works)
+Ewa Deelman,REVIEW,Used A5031941569 = 'Ewa Deelman' (543 works). Other candidates: A5107447336 (6 works)
+Morteza Dehghani,REVIEW,"Used A5065952016 = 'Morteza Dehghani' (167 works). Other candidates: A5140769787 (11 works), A5074460384 (6 works)"
+Bistra Dilkina,REVIEW,Used A5087538704 = 'Bistra Dilkina' (228 works). Other candidates: A5160064050 (1 works)
+Yao Du,REVIEW,"Used A5065841312 = 'Yao Du' (25 works). Other candidates: A5100940199 (23 works), A5102576944 (2 works), A5159281735 (1 works), A5140965988 (1 works)"
+Emilio Ferrara,REVIEW,Used A5078699564 = 'Emilio Ferrara' (415 works). Other candidates: A5053161222 (1 works)
+Louis Goldstein,REVIEW,Used A5110122617 = 'Louis M. Goldstein' (333 works). Other candidates: A5128249316 (2 works)
+Leana Golubchik,REVIEW,Used A5081582862 = 'Leana Golubchik' (241 works). Other candidates: A5159921955 (1 works)
+Andrew Gordon,REVIEW,"Used A5070125884 = 'Andrew S. Gordon' (159 works). Other candidates: A5103574915 (10 works), A5032862939 (5 works)"
+Jonathan Gratch,REVIEW,"Used A5051992568 = 'Jonathan S. Gratch' (529 works). Other candidates: A5111548075 (42 works), A5109855657 (4 works), A5124824930 (1 works)"
+John Heidemann,REVIEW,Used A5090014731 = 'John Heidemann' (330 works). Other candidates: A5129818879 (3 works)
+Ellis Horowitz,NO_RECENT,no papers since 2023-01-01
+Laurent Itti,REVIEW,"Used A5054494771 = 'Laurent Itti' (318 works). Other candidates: A5054971726 (43 works), A5159717996 (1 works)"
+Elsi Kaiser,REVIEW,Used A5039738315 = 'Elsi M Kaiser' (184 works). Other candidates: A5077393785 (13 works)
+Jonas Kaplan,REVIEW,"Used A5036147064 = 'Jonas Kaplan' (117 works). Other candidates: A5137177531 (3 works), A5153612040 (1 works)"
+Kristina Lerman,REVIEW,Used A5049634383 = 'Kristina Lerman' (421 works). Other candidates: A5026832891 (13 works)
+Yan Liu,REVIEW,"Used A5100351175 = 'Yan Liu' (378 works). Other candidates: A5100768487 (223 works), A5002586536 (116 works), A5102757033 (97 works), A5100351066 (48 works), A5100351112 (41 works), A5100511042 (33 works), A5158878263 (1 works)"
+Haipeng Luo,REVIEW,"Used A5101058302 = 'Haipeng Luo' (167 works). Other candidates: A5103080093 (30 works), A5138936644 (4 works), A5160374267 (2 works), A5146834333 (1 works), A5125580561 (1 works), A5137645349 (1 works), A5153513268 (1 works), A5160523494 (1 works), A5139387223 (1 works)"
+Shrikanth Narayanan,REVIEW,"Used A5010028928 = 'Shrikanth Shri Narayanan' (1041 works). Other candidates: A5104114055 (126 works), A5103555640 (112 works), A5128636623 (30 works), A5134128309 (13 works), A5114034506 (5 works), A5128226971 (5 works), A5134172233 (4 works), A5128817482 (4 works), A5158159610 (2 works), A5153637148 (2 works), A5128425704 (1 works), A5133641529 (1 works), A5160403787 (1 works)"
+Samuel Nastase,REVIEW,Used A5056266198 = 'Samuel A. Nastase' (107 works). Other candidates: A5138788286 (5 works)
+Clifford Neuman,NO_RECENT,no papers since 2023-01-01
+Jay Pujara,REVIEW,Used A5073443117 = 'Jay Pujara' (121 works). Other candidates: A5127371743 (7 works)
+Srivatsan Ravi,REVIEW,"Used A5090605375 = 'Srivatsan Ravi' (79 works). Other candidates: A5115060573 (8 works), A5152468340 (1 works)"
+Mark Redekopp,NO_RECENT,no papers since 2023-01-01
+Xiang Ren,REVIEW,"Used A5009408707 = 'Xiang Ren' (317 works). Other candidates: A5055276776 (142 works), A5101580485 (73 works), A5079024093 (62 works), A5064627026 (53 works), A5077916902 (39 works), A5101461299 (34 works), A5140824612 (5 works), A5130630676 (3 works), A5138816528 (2 works), A5128377759 (1 works), A5136762603 (1 works), A5147786143 (1 works), A5124873154 (1 works), A5155964210 (1 works), A5160375161 (1 works), A5157767968 (1 works), A5159083349 (1 works), A5125476589 (1 works), A5137898312 (1 works)"
+Paul Rosenbloom,REVIEW,Used A5036675179 = 'Paul S. Rosenbloom' (249 works). Other candidates: A5159099067 (1 works)
+Shawn Shamsian,REVIEW,Used A5086045301 = 'Shahriar Shamsian' (2 works). Other candidates: 
+Shawn Shamsian,NO_RECENT,no papers since 2023-01-01
+Wei-Min Shen,REVIEW,"Used A5103357388 = 'Wei‐Min Shen' (121 works). Other candidates: A5110504007 (18 works), A5110217175 (6 works), A5090204073 (2 works), A5049059753 (1 works)"
+Wei-Min Shen,NO_RECENT,no papers since 2023-01-01
+Stephanie Shih,NO_RECENT,no papers since 2023-01-01
+Mohammad Soleymani,REVIEW,"Used A5024169758 = 'Mohammad Soleymani' (134 works). Other candidates: A5135317337 (1 works), A5130726668 (1 works)"
+Bill Swartout,REVIEW,Used A5072714365 = 'William Swartout' (149 works). Other candidates: 
+Shang-Hua Teng,REVIEW,Used A5102005063 = 'Shang‐Hua Teng' (310 works). Other candidates: A5126372937 (23 works)
+Satish Thittamaranahalli,NOT_FOUND,No USC-affiliated OpenAlex author matched. Find the ID on openalex.org and add openalex_id.
+Jesse Thomason,REVIEW,Used A5108062941 = 'Jesse Thomason' (145 works). Other candidates: A5137735450 (1 works)
+Ning Wang,REVIEW,"Used A5058107332 = 'Ning Wang' (1020 works). Other candidates: A5100745648 (241 works), A5100387132 (212 works), A5100387218 (61 works), A5100387128 (42 works), A5100387112 (31 works), A5100387205 (29 works), A5101687991 (26 works), A5100647427 (23 works), A5114626663 (22 works), A5044228210 (16 works), A5008914682 (5 works), A5123008401 (2 works), A5123015113 (1 works), A5151966854 (1 works)"
+Weihang Wang,REVIEW,"Used A5072088517 = 'Weihang Wang' (58 works). Other candidates: A5101891768 (16 works), A5013342594 (4 works), A5139863949 (1 works), A5160190594 (1 works), A5136443210 (1 works)"
+Chao Wang,REVIEW,"Used A5115076700 = 'Chao Wang' (1098 works). Other candidates: A5100370328 (1012 works), A5100406987 (457 works), A5100406906 (448 works), A5100773459 (264 works), A5100407035 (239 works), A5100407078 (134 works), A5100406950 (127 works), A5103454930 (119 works), A5100406971 (77 works), A5100406890 (76 works), A5100407176 (58 works), A5115602540 (55 works), A5100407137 (49 works), A5100407110 (46 works), A5100407063 (41 works), A5079094062 (40 works), A5100406941 (37 works), A5100407090 (22 works), A5101934907 (19 works), A5100407152 (18 works), A5002478587 (14 works)"
+Jiapeng Zhang,REVIEW,"Used A5100662067 = 'Jiapeng Zhang' (67 works). Other candidates: A5100662070 (33 works), A5100662069 (6 works), A5130541835 (6 works), A5069650850 (4 works), A5160820583 (1 works), A5160569806 (1 works), A5139836207 (1 works)"
+Jieyu Zhao,REVIEW,"Used A5066282713 = 'Jieyu Zhao' (159 works). Other candidates: A5087047891 (49 works), A5116252295 (31 works), A5105464125 (15 works), A5134445908 (6 works), A5042823599 (3 works), A5139851602 (3 works), A5134337898 (2 works), A5133612402 (2 works), A5158825336 (2 works), A5130410119 (1 works), A5128894771 (1 works), A5158495491 (1 works), A5137612961 (1 works), A5144365130 (1 works)"
+Rahul Jain,REVIEW,"Used A5002082998 = 'Rahul Jain' (187 works). Other candidates: A5051676245 (179 works), A5101760430 (23 works), A5144990980 (1 works), A5161377719 (1 works)"
+Viktor Prasanna,REVIEW,"Used A5033166029 = 'Viktor K. Prasanna' (961 works). Other candidates: A5113655787 (82 works), A5004966359 (17 works), A5124911326 (4 works), A5109255480 (2 works), A5153665327 (1 works), A5159151457 (1 works), A5138210505 (1 works)"
+Bhaskar Krishnamachari,REVIEW,"Used A5063784062 = 'Bhaskar Krishnamachari' (574 works). Other candidates: A5021685344 (19 works), A5089756690 (9 works), A5124097792 (2 works), A5152692417 (1 works)"
+Ulrich Neumann,REVIEW,Used A5082235583 = 'Ulrich Neumann' (283 works). Other candidates: A5030865104 (10 works)
+Eric Rice,REVIEW,"Used A5057585140 = 'Eric R. W. Rice' (262 works). Other candidates: A5123134434 (3 works), A5130864865 (2 works)"
+Yajie Zhao,REVIEW,"Used A5108055179 = 'Yajie Zhao' (54 works). Other candidates: A5101433524 (34 works), A5102884277 (34 works), A5101066876 (17 works), A5100601592 (16 works), A5130850912 (4 works), A5111137339 (3 works), A5124506509 (2 works), A5148173599 (1 works), A5157873696 (1 works), A5158935390 (1 works), A5156314488 (1 works), A5157988226 (1 works), A5158234719 (1 works), A5158769861 (1 works)"
