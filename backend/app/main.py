@@ -3,6 +3,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from .data_loader import build_catalog, load_courses, load_reviews
 from .models import StudentPreferences, RecommendationResponse
 from .recommender import recommend
+from fastapi import HTTPException
+from .chat_service import ChatRequest, ChatResponse, chat
 
 app = FastAPI(title='Trojan PALS — Course Recommendations', version='0.3.0')
 app.add_middleware(
@@ -33,13 +35,23 @@ def reviews():
 def recommend_endpoint(preferences: StudentPreferences):
     return recommend(preferences)
 
-
-from fastapi import HTTPException
-from .chat_service import ChatRequest, ChatResponse, chat
-
 @app.post('/chat', response_model=ChatResponse)
 def chat_endpoint(request: ChatRequest):
     try:
         return chat(request)
     except (RuntimeError, ValueError) as exc:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
+    
+from .chat_router import (
+    RoutedChatRequest,
+    RoutedChatResponse,
+    route_chat,
+)
+
+
+@app.post(
+    "/chat/route",
+    response_model=RoutedChatResponse,
+)
+def routed_chat_endpoint(request: RoutedChatRequest):
+    return route_chat(request)

@@ -3,6 +3,7 @@ from pydantic import BaseModel, Field
 
 class StudentPreferences(BaseModel):
     interests: List[str] = Field(default_factory=list)
+    completed_courses: List[str] = Field(default_factory=list)
     max_difficulty: Optional[float] = Field(default=None, ge=1, le=5)
     preferred_assessment: Literal['any','projects','exams','homework','no_exams'] = 'any'
     workload_preference: Literal['any','light','moderate','high'] = 'any'

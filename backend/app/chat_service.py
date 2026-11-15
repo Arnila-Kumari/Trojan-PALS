@@ -20,6 +20,7 @@ FIELDS = {
     "workload_preference",
     "priority",
     "top_k",
+    "completed_courses",
 }
 
 CHOICES = {

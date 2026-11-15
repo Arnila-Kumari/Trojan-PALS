@@ -22,6 +22,7 @@ from .models import (
     StudentPreferences,
 )
 from .semantic_matcher import calculate_semantic_scores
+from .student_context import exclude_completed
 
 
 # --------------------------------------------------
@@ -340,6 +341,11 @@ def recommend(
         build_catalog()
         if catalog is None
         else catalog
+    )
+    
+    rows = exclude_completed(
+        rows,
+        preferences.completed_courses
     )
 
     if not rows:
