@@ -1,8 +1,8 @@
-# Trojan PALS 🎓
+# TrojanPALS 🎓
 
 **Your AI-powered academic and research companion at USC.**
 
-Trojan PALS helps University of Southern California students make informed decisions about their academic journey by connecting course recommendations, student experiences, faculty research, and personalized research preparation in one platform.
+TrojanPALS helps University of Southern California students make informed decisions about their academic journey by connecting course recommendations, student experiences, faculty research, and personalized research preparation in one platform.
 
 Instead of searching through course catalogs, professor directories, and research websites separately, students can explore their options through a personalized AI companion.
 
@@ -26,7 +26,7 @@ Recommendations are intended to support academic planning, not predict grades or
 
 ### 2. AI Academic Companion
 
-Chat with Trojan PALS using natural language to explore courses and research opportunities.
+Chat with TrojanPALS using natural language to explore courses and research opportunities.
 
 **Example questions:**
 
@@ -51,7 +51,7 @@ Students can discover researchers even when they are unfamiliar with specific la
 
 ### 4. Personalized Research Roadmaps
 
-Trojan PALS generates actionable research pathways that help students move from discovering a research interest to preparing for potential involvement.
+TrojanPALS generates actionable research pathways that help students move from discovering a research interest to preparing for potential involvement.
 
 Roadmaps include:
 
@@ -86,7 +86,7 @@ These are preparation suggestions, not verified skill deficiencies or official l
 
 ### 6. Student Profiles and Reviews
 
-Trojan PALS supports personalized accounts through Supabase.
+TrojanPALS supports personalized accounts through Supabase.
 
 - Google authentication
 - Student profile onboarding and editing
@@ -101,7 +101,7 @@ Student-submitted reviews and imported sample records are distinguished from off
 
 ## AI and System Architecture
 
-Trojan PALS combines semantic retrieval, structured LLM extraction, recommendation logic, and evidence-grounded research guidance.
+TrojanPALS combines semantic retrieval, structured LLM extraction, recommendation logic, and evidence-grounded research guidance.
 
 | Component | Technology | Purpose |
 |---|---|---|
@@ -261,7 +261,7 @@ The frontend uses authenticated Next.js API routes to communicate with the Pytho
 
 ## Data Sources and Responsible AI
 
-Trojan PALS combines official academic sources, research metadata, and student-contributed information.
+TrojanPALS combines official academic sources, research metadata, and student-contributed information.
 
 - **USC:** Course catalog, schedule, faculty profiles, and laboratory information
 - **OpenAlex:** Research publication metadata and abstracts
@@ -293,6 +293,6 @@ Trojan PALS combines official academic sources, research metadata, and student-c
 
 ## Project Repository
 
-[GitHub — Trojan PALS](https://github.com/Arnila-Kumari/Trojan-PALS)
+[GitHub — TrojanPALS](https://github.com/Arnila-Kumari/Trojan-PALS)
 
-**Trojan PALS — Discover courses. Explore research. Build your path.**
+**TrojanPALS — Discover courses. Explore research. Build your path.**
