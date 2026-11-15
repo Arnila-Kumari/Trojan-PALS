@@ -98,3 +98,4 @@
 .rm-discuss-btn{display:inline-flex;align-items:center;gap:9px;margin:2px 0 14px;padding:11px 18px;border-radius:999px;font-size:13px;font-weight:500;color:#5e0f1d;background:#fff;border:1.5px solid #8a1b31;text-decoration:none;box-shadow:0 4px 14px #5e0f1d1a;transition:background .15s ease,transform .15s ease}
 .rm-discuss-btn:hover{background:#fbefed;transform:translateY(-1px)}
 .rm-discuss-btn svg:first-child{color:#8a1b31}
+.rm-json-btn{padding:10px 16px;font-size:12px}

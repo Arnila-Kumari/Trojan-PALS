@@ -4,16 +4,16 @@
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { matchResearch, type ResearchResult } from "@/lib/research-api";
-import { api, useApp } from "./app-provider";
+import { useApp } from "./app-provider";
+import { addRoadmap, downloadRoadmapJson, loadRoadmaps, MAX_ROADMAPS, removeRoadmap, updateDone, type RoadmapStore, type SavedRoadmap } from "@/lib/roadmap-store";
 import { Icon } from "./icon";
 
 const LEVELS = ["Undergraduate", "Master's", "PhD"] as const;
 const DONE_KEY = "trojanpals-roadmap-done-v1";
 type Level = (typeof LEVELS)[number];
-type SavedRoadmap = { id: string; title: string; query: string; level: Level; target: string | null; done: string[] };
 
 export function ResearchPage() {
-  const { profile } = useApp();
+  const { profile, user } = useApp();
   const [query, setQuery] = useState("");
   const [level, setLevel] = useState<(typeof LEVELS)[number]>("Master's");
   const [background, setBackground] = useState("");
@@ -29,23 +29,23 @@ export function ResearchPage() {
     ? `${profile.interests.slice(0, 2).join(" and ")} research`
     : "NLP applications in healthcare";
   const [saved, setSaved] = useState<SavedRoadmap[]>([]);   // up to 3 roadmaps on this profile
-  const [maxSaved, setMaxSaved] = useState(3);
+  const maxSaved = MAX_ROADMAPS;
+  const [store, setStore] = useState<RoadmapStore>("browser");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [saveNote, setSaveNote] = useState("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {   // load this student's saved roadmaps once they're signed in
-    if (!profile.name) return;
-    api<{ roadmaps: SavedRoadmap[]; max: number; setupNeeded?: boolean }>("/api/roadmaps")
+    if (!user) return;
+    loadRoadmaps(user.id)
       .then(r => {
-        setSaved(r.roadmaps); setMaxSaved(r.max);
-        if (r.setupNeeded) setSaveNote("Saving roadmaps needs a one-time database update (003_saved_roadmaps.sql).");
+        setSaved(r.roadmaps); setStore(r.store);
         const want = new URLSearchParams(window.location.search).get("roadmap");   // opened from the Profile page
         const hit = want ? r.roadmaps.find(x => x.id === want) : undefined;
         if (hit) openSaved(hit);
       })
       .catch(() => { /* not signed in or offline: page still works without saving */ });
-  }, [profile.name]);
+  }, [user]);
 
   const fromChat = useRef<{ q: string; level: string } | null>(null);
   useEffect(() => {   // opened from the chatbot's "Open my research roadmap" link: /research?q=...&level=...
@@ -102,8 +102,8 @@ export function ResearchPage() {
     try { localStorage.setItem(DONE_KEY, JSON.stringify(next)); } catch { /* ignore */ }
     if (activeId) {   // keep progress on the saved roadmap in the student's profile
       const mine = next.filter(x => x.startsWith(`${result?.query}|`)).slice(-60);
-      setSaved(list => list.map(r => r.id === activeId ? { ...r, done: mine } : r));
-      void api("/api/roadmaps", "PATCH", { id: activeId, done: mine }).catch(() => setSaveNote("Couldn't save your progress. Check your connection."));
+      if (user) void updateDone(user.id, store, saved, activeId, mine).then(setSaved)
+        .catch(() => setSaveNote("Couldn't save your progress. Check your connection."));
     }
   }
 
@@ -114,11 +114,13 @@ export function ResearchPage() {
       const target = rm.target?.professor ?? "";
       const topic = result.interests.length ? result.interests.join(" and ") : result.query;
       const mine = done.filter(x => x.startsWith(`${result.query}|`)).slice(-60);
-      const r = await api<{ roadmap: SavedRoadmap }>("/api/roadmaps", "POST", {
-        query: result.query, level, target, done: mine,
-        title: (target ? `${topic} · ${target}` : topic).slice(0, 120),
+      if (!user) throw new Error("Sign in to save roadmaps.");
+      const next = await addRoadmap(user.id, store, saved, {
+        query: result.query, level, target: target || null, done: mine,
+        title: (target ? `${topic} · ${target}` : topic).slice(0, 120), snapshot: result,
       });
-      setSaved(list => [...list, r.roadmap]); setActiveId(r.roadmap.id); setSaveNote("Roadmap saved to your profile.");
+      setSaved(next); setActiveId(next[next.length - 1].id);
+      setSaveNote(store === "account" ? "Roadmap saved to your profile." : "Roadmap saved in this browser.");
     } catch (err) { setSaveNote((err as Error).message); }
     finally { setSaving(false); }
   }
@@ -126,13 +128,16 @@ export function ResearchPage() {
   function openSaved(r: SavedRoadmap) {
     setActiveId(r.id); setQuery(r.query); setLevel(r.level); setSaveNote("");
     setDone(prev => [...new Set([...prev.filter(x => !x.startsWith(`${r.query}|`)), ...r.done])]);
-    void run(undefined, r.query, r.level);
+    if (r.snapshot) {   // browser-saved roadmaps carry the full result: reopen instantly
+      setResult(r.snapshot); setError("");
+      setEmail(r.snapshot.roadmap.email ? `Subject: ${r.snapshot.roadmap.email.subject}\n\n${r.snapshot.roadmap.email.body}` : "");
+    } else void run(undefined, r.query, r.level);
   }
 
   async function removeSaved(r: SavedRoadmap) {
     try {
-      await api("/api/roadmaps", "DELETE", { id: r.id });
-      setSaved(list => list.filter(x => x.id !== r.id));
+      if (!user) return;
+      setSaved(await removeRoadmap(user.id, store, saved, r.id));
       if (activeId === r.id) setActiveId(null);
       setSaveNote("Roadmap removed.");
     } catch (err) { setSaveNote((err as Error).message); }
@@ -233,6 +238,8 @@ export function ResearchPage() {
               : <button type="button" className="rm-save-btn" onClick={() => void saveRoadmap()} disabled={saving || saved.length >= maxSaved}>
                   <Icon name="bookmark" size={15} />{saving ? "Saving…" : `Save this roadmap (${saved.length}/${maxSaved})`}</button>}
             {!activeId && saved.length >= maxSaved && <span className="rm-small">You can keep {maxSaved} roadmaps. Remove one above to save this.</span>}
+            <button type="button" className="btn secondary rm-json-btn" onClick={() => result && downloadRoadmapJson(result, level, done.filter(x => x.startsWith(`${result.query}|`)))}>
+              <Icon name="arrow" size={14} />Download .json</button>
             {saveNote && <span className="rm-small" role="status">{saveNote}</span>}
           </div>
           {rm.backup_targets.length > 0 && <p className="rm-small">Backups: {rm.backup_targets.join(", ")}</p>}

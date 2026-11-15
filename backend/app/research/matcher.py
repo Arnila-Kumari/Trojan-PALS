@@ -110,10 +110,14 @@ class Matcher:
                          "profile_url": getattr(f, "profile_url", "") or getattr(f, "source_link", ""),
                          "labs": labs, "courses": courses[["course_id", "course_title"]].to_dict("records"),
                          "papers": papers.to_dict("records"),
-                         "text": f"{ptext} {ptext} {ltext} {ctext} {f.areas} {f.department}".replace(";", " ").lower()})
+                         "text": f"{ptext} {ptext} {ltext} {ctext} {f.areas} {f.department}".replace(";", " ").lower(),
+                         "fields": [ptext, f"{ltext} {f.areas}", ctext]})
         self.profiles = rows
         self.pvec = TfidfVectorizer(stop_words="english", ngram_range=(1, 2), sublinear_tf=True)
         self.P = self.pvec.fit_transform([r["text"] for r in rows])
+        # Score each kind of evidence separately so many paper abstracts don't drown out a lab or course
+        # that matches the question exactly (papers / labs+areas / courses).
+        self.F = [self.pvec.transform([(r["fields"][i] or "").replace(";", " ").lower() for r in rows]) for i in range(3)]
 
     def _evidence(self, p, qv):
         d = self.d
@@ -147,7 +151,10 @@ class Matcher:
     def match_researchers(self, query: str, k: int = 5, cs_only: bool = False) -> list[dict]:
         self._qt = query_text(query)
         qv = self.pvec.transform([self._qt])
-        sims = (self.P @ qv.T).toarray().ravel()
+        whole = (self.P @ qv.T).toarray().ravel()
+        per = [(F @ qv.T).toarray().ravel() for F in self.F]   # papers, labs+areas, courses
+        best = np.maximum(np.maximum(per[0], per[1]), 0.85 * per[2])
+        sims = 0.7 * best + 0.3 * whole
         # Rank research-active faculty (a lab or loaded papers) above people matched only by courses they teach.
         active = np.array([1.0 if (p["labs"] or p["papers"]) else 0.7 for p in self.profiles])
         sims = sims * active

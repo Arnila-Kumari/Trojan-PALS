@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { interestOptions, Profile, researchAreas, ResearchExperience } from "@/lib/data";
 import { api, useApp } from "./app-provider";
 import { Icon } from "./icon";
+import { loadRoadmaps, MAX_ROADMAPS, type SavedRoadmap } from "@/lib/roadmap-store";
 import { SaveCourse } from "./course-card";
 export function ProfileEditor({onboarding=false}:{onboarding?:boolean}){
  const {profile,courses,saveProfile,signOut,toast}=useApp();
@@ -33,10 +34,9 @@ export function ProfilePage(){
 
 
 // Saved research roadmaps (max 3), from /api/roadmaps. Click one to reopen it on the Research page.
-type SavedRoadmap={id:string;title:string;query:string;level:string;target:string|null;done:string[]};
 function SavedRoadmaps(){
-  const {user}=useApp();const [items,setItems]=useState<SavedRoadmap[]>([]);const [max,setMax]=useState(3);
-  useEffect(()=>{if(!user)return;api<{roadmaps:SavedRoadmap[];max:number}>("/api/roadmaps").then(r=>{setItems(r.roadmaps);setMax(r.max);}).catch(()=>{});},[user]);
+  const {user}=useApp();const [items,setItems]=useState<SavedRoadmap[]>([]);const max=MAX_ROADMAPS;
+  useEffect(()=>{if(!user)return;void loadRoadmaps(user.id).then(r=>setItems(r.roadmaps));},[user]);
   return <section className="profile-roadmaps" aria-label="Saved research roadmaps">
     <div className="section-heading"><h2>My research roadmaps</h2><span className="count-pill">{items.length}/{max}</span></div>
     {items.length===0?<div className="empty-state compact"><h3>No roadmaps saved yet.</h3><p>Build one on the Research page and save up to {max}.</p><Link href="/research" className="btn secondary">Find my research roadmap</Link></div>

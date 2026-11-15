@@ -5,21 +5,25 @@ import { researchAreas } from "@/lib/data";
 import type { ChatReply } from "@/lib/chat-context";
 import { api, Message, useApp, welcomeMessage } from "./app-provider";
 import { Icon } from "./icon";
-type SavedChat={id:string;title:string;messages:Message[];updated_at:string};
+import { deleteChat, loadChats, MAX_CHATS, saveChat, type ChatStore, type SavedChat } from "@/lib/chat-history";
 const prompts=["I’m interested in NLP. What do the course reviews say?","Compare the workload reports for CSCI 544 and CSCI 566.","What do students recommend for preparing for algorithms?","Help me draft an email to a professor."];
 export function ChatPage(){
  const {profile,courses,reviews,messages,setMessages}=useApp();const [input,setInput]=useState("");const [busy,setBusy]=useState(false);const [error,setError]=useState("");const [useProfile,setUseProfile]=useState(true);const [contextSlug,setContextSlug]=useState<string|undefined>();const bottom=useRef<HTMLDivElement>(null);const pending=useRef(false);const mounted=useRef(true)
- // Saved conversations (max 3 per profile), stored in Supabase via /api/chats.
- const [savedChats,setSavedChats]=useState<SavedChat[]>([]);const [maxChats,setMaxChats]=useState(3);const [activeChat,setActiveChat]=useState<string|null>(null);const [chatNote,setChatNote]=useState("");const [savingChat,setSavingChat]=useState(false);
- useEffect(()=>{api<{chats:SavedChat[];max:number;setupNeeded?:boolean}>("/api/chats").then(r=>{setSavedChats(r.chats);setMaxChats(r.max);if(r.setupNeeded)setChatNote("Saving chats needs a one-time database update (003_saved_roadmaps.sql).");}).catch(()=>{});},[]);
- const lastSynced=useRef("");
- useEffect(()=>{   // keep an opened saved chat up to date as the conversation continues
-  if(!activeChat||busy||messages.length<2)return;const key=`${activeChat}:${messages.length}`;if(lastSynced.current===key)return;lastSynced.current=key;
-  void api<{chat:SavedChat}>("/api/chats","PATCH",{id:activeChat,messages:messages.slice(-60)}).then(r=>setSavedChats(list=>list.map(c=>c.id===r.chat.id?r.chat:c))).catch(()=>setChatNote("Couldn't update the saved chat."));
- },[activeChat,busy,messages]);
- async function saveChat(){setSavingChat(true);setChatNote("");try{const r=await api<{chat:SavedChat}>("/api/chats","POST",{messages:messages.slice(-60)});setSavedChats(list=>[r.chat,...list]);setActiveChat(r.chat.id);lastSynced.current=`${r.chat.id}:${messages.length}`;setChatNote("Chat saved. New messages are added to it automatically.");}catch(err){setChatNote((err as Error).message);}finally{setSavingChat(false);}}
- function openChat(c:SavedChat){if(busy)return;setMessages(c.messages);setActiveChat(c.id);lastSynced.current=`${c.id}:${c.messages.length}`;setError("");setChatNote("");}
- async function removeChat(c:SavedChat){try{await api("/api/chats","DELETE",{id:c.id});setSavedChats(list=>list.filter(x=>x.id!==c.id));if(activeChat===c.id)setActiveChat(null);setChatNote("Saved chat removed.");}catch(err){setChatNote((err as Error).message);}};
+ // Chat history: the 3 most recent conversations, saved automatically after every reply
+ // (to the student's account when the database is set up, otherwise in this browser). See lib/chat-history.ts.
+ const {user}=useApp();
+ const [savedChats,setSavedChats]=useState<SavedChat[]>([]);const [store,setStore]=useState<ChatStore>("browser");const [activeChat,setActiveChat]=useState<string|null>(null);const [chatNote,setChatNote]=useState("");
+ useEffect(()=>{if(!user)return;void loadChats(user.id).then(r=>{setSavedChats(r.chats);setStore(r.store);});},[user]);
+ const lastSaved=useRef("");
+ useEffect(()=>{   // auto-save after each reply
+  if(!user||busy||messages.filter(m=>m.id!=="welcome").length<2)return;
+  const sig=`${activeChat}:${messages.length}:${messages[messages.length-1]?.id}`;if(lastSaved.current===sig)return;lastSaved.current=sig;
+  void saveChat(user.id,store,savedChats,activeChat,messages).then(r=>{setSavedChats(r.chats);setActiveChat(r.id);lastSaved.current=`${r.id}:${messages.length}:${messages[messages.length-1]?.id}`;})
+   .catch(()=>setChatNote("Couldn't save this chat right now."));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+ },[busy,messages,user]);
+ function openChat(c:SavedChat){if(busy)return;setMessages(c.messages);setActiveChat(c.id);lastSaved.current=`${c.id}:${c.messages.length}:${c.messages[c.messages.length-1]?.id}`;setError("");setChatNote("");}
+ async function removeChat(c:SavedChat){if(!user)return;try{setSavedChats(await deleteChat(user.id,store,savedChats,c.id));if(activeChat===c.id){setActiveChat(null);setMessages([welcomeMessage]);}}catch{setChatNote("Couldn't remove that chat.");}};
  useEffect(()=>{mounted.current=true;setContextSlug(new URLSearchParams(window.location.search).get("course")??undefined);return()=>{mounted.current=false;};},[]);
  const asked=useRef(false);
  useEffect(()=>{   // opened from "Discuss this roadmap" on the Research page: /chat?ask=...
@@ -42,8 +46,7 @@ export function ChatPage(){
      <p>Discuss courses using your account preferences and the connected review records.</p>
     </div>
     <div className="chat-head-actions">
-     {activeChat?<span className="rm-small"><Icon name="check" size={13}/> Saved chat</span>
-      :<button className="rm-save-btn" disabled={busy||savingChat||messages.length<=1||savedChats.length>=maxChats} onClick={()=>void saveChat()}><Icon name="bookmark" size={15}/>{savingChat?"Saving…":`Save this chat (${savedChats.length}/${maxChats})`}</button>}
+     {activeChat&&<span className="rm-small"><Icon name="check" size={13}/> Saved automatically</span>}
      <button className="btn secondary" disabled={busy||messages.length<=1} onClick={()=>{setMessages([welcomeMessage]);setError("");setActiveChat(null);setChatNote("");}}>
       <Icon name="plus" size={16}/>New conversation
      </button>
@@ -83,12 +86,12 @@ export function ChatPage(){
     </section>
     <aside className="chat-aside">
      {(savedChats.length>0||chatNote)&&<div className="panel saved-chats">
-      <div className="rm-saved-head"><span className="tiny-label">MY SAVED CHATS</span><span className="count-pill">{savedChats.length}/{maxChats}</span></div>
+      <div className="rm-saved-head"><span className="tiny-label">RECENT CHATS</span><span className="count-pill">{savedChats.length}/{MAX_CHATS}</span></div>
       {savedChats.map(c=><div key={c.id} className={`saved-chat ${activeChat===c.id?"active":""}`}>
-       <button disabled={busy} onClick={()=>openChat(c)}><Icon name="chat" size={14}/><span>{c.title}</span><small>{c.messages.length} messages</small></button>
+       <button disabled={busy} onClick={()=>openChat(c)}><Icon name="chat" size={14}/><span>{c.title}</span><small>{c.messages.filter(m=>m.id!=="welcome").length} messages · {new Date(c.updated_at).toLocaleDateString(undefined,{month:"short",day:"numeric"})}</small></button>
        <button className="icon-button" aria-label={`Remove ${c.title}`} onClick={()=>void removeChat(c)}><Icon name="close" size={13}/></button>
       </div>)}
-      {savedChats.length>=maxChats&&!activeChat&&<p className="rm-small">You can keep {maxChats} chats. Remove one to save another.</p>}
+      <p className="rm-small">Your {MAX_CHATS} most recent chats are saved automatically {store==="account"?"to your account":"in this browser"}. Starting a new one replaces the oldest.</p>
       {chatNote&&<p className="rm-small" role="status">{chatNote}</p>}
      </div>}
      <div className="panel">
