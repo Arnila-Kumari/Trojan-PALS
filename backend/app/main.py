@@ -55,3 +55,9 @@ from .chat_router import (
 )
 def routed_chat_endpoint(request: RoutedChatRequest):
     return route_chat(request)
+
+
+# Journey B: research matching + roadmap (/research/*)
+from .research_api import router as research_router
+
+app.include_router(research_router)

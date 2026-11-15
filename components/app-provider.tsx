@@ -3,7 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useRef, useState } f
 import { Course, defaultProfile, Profile, ProfileTemplate, Review, ReviewInput } from "@/lib/data";
 import { getSupabaseConfig } from "@/lib/supabase/config";
 import { createClient } from "@/lib/supabase/client";
-export type Message={id:string;role:"user"|"assistant";text:string;courseIds?:string[];researchIds?:string[];reviewIds?:string[];mode?:"llm"|"matching";};
+export type Message={id:string;role:"user"|"assistant";text:string;courseIds?:string[];researchIds?:string[];reviewIds?:string[];mode?:"llm"|"matching";roadmapLink?:string;};
 export const welcomeMessage:Message={id:"welcome",role:"assistant",text:"Tell me what you’d like to learn. I can use your saved preferences and the course review records to help you explore your options. Supplied reviews are unverified reports, not official course information. Your account name and email are not automatically attached to model requests. Chat history lasts for this session only."};
 type User={id:string;email:string;provider:string;providers:string[]};
 type Bootstrap={user:User;profile:Profile|null;courses:Course[];reviews:Review[];templates:ProfileTemplate[];saved:string[];savedResearch:string[];};
