@@ -4,7 +4,7 @@ import { courses, defaultProfile, interestOptions, Profile, researchAreas } from
 export type Message = { id: string; role: "user" | "assistant"; text: string; courseIds?: string[]; researchIds?: string[]; };
 type Store = { profile:Profile; setProfile:(profile:Profile)=>void; saved:string[]; toggleSaved:(id:string)=>void; savedResearch:string[]; toggleResearch:(id:string)=>void; messages:Message[]; setMessages:React.Dispatch<React.SetStateAction<Message[]>>; toast:(message:string)=>void; ready:boolean; storageWarning:string; };
 const Context = createContext<Store | null>(null);
-const initialMessage:Message={id:"welcome",role:"assistant",text:"Hi! Tell me what you’d like to learn and what you want your next semester to feel like. I can help you explore sample courses, compare workloads, and find related research directions.\n\nThis is a frontend demo: replies use local matching rules, not a live AI model. Course details and research directions are illustrative."};
+const initialMessage:Message={id:"welcome",role:"assistant",text:"Hi! Tell me what you’d like to learn and what you want your next semester to feel like. I can help you explore courses, compare reported workloads, and think through academic choices. Research matching is coming soon."};
 export function AppProvider({children}:{children:React.ReactNode}) {
   const [profile,setProfile]=useState<Profile>(defaultProfile);
   const [saved,setSaved]=useState<string[]>([]);

@@ -1,0 +1,233 @@
+[
+  {
+    "course_name": "Analysis of Algorithms",
+    "course_code": "CSCI-570",
+    "semester": "Fall 2026",
+    "instructor": "Shahriar Shamsian",
+    "difficulty": "4.0",
+    "assessments": "Weekly problem sets, programming exercises, 2 midterms, and 1 final exam.",
+    "workload": "Challenging course with regular assignments. Requires strong mathematical and problem-solving skills.",
+    "grade": "B+",
+    "advice": "Practice algorithms regularly and understand the concepts instead of memorizing solutions."
+  },
+  {
+    "course_name": "Analysis of Algorithms",
+    "course_code": "CSCI-570",
+    "semester": "Fall 2026",
+    "instructor": "Shahriar Shamsian",
+    "difficulty": "3.5",
+    "assessments": "Weekly coding exercises, written problem sets, midterm examinations, and a final exam.",
+    "workload": "Moderately heavy workload. Some assignments are time-consuming, especially graph algorithms and dynamic programming.",
+    "grade": "A-",
+    "advice": "Start problem sets early and practice solving problems without looking at solutions."
+  },
+  {
+    "course_name": "Analysis of Algorithms",
+    "course_code": "CSCI-570",
+    "semester": "Fall 2026",
+    "instructor": "Shahriar Shamsian",
+    "difficulty": "4.5",
+    "assessments": "Programming assignments, theoretical problem sets, 2 midterms, and a comprehensive final exam.",
+    "workload": "Heavy workload because the theoretical material can be difficult to understand without consistent practice.",
+    "grade": "B",
+    "advice": "Make sure you understand time complexity, recursion, and dynamic programming before exams."
+  },
+  {
+    "course_name": "Database Systems",
+    "course_code": "CSCI-585",
+    "semester": "Fall 2026",
+    "instructor": "Saty Raghavachary",
+    "difficulty": "3.5",
+    "assessments": "SQL assignments, 2 programming projects, quizzes, and a final exam.",
+    "workload": "Moderate workload. Projects can take time, especially when working with database implementation.",
+    "grade": "A",
+    "advice": "Review SQL and database concepts before the course. Start projects early."
+  },
+  {
+    "course_name": "Database Systems",
+    "course_code": "CSCI-585",
+    "semester": "Fall 2026",
+    "instructor": "Saty Raghavachary",
+    "difficulty": "3.0",
+    "assessments": "SQL homework, database design assignments, group project, quizzes, and a final exam.",
+    "workload": "Fairly manageable if you have previous programming experience. The project requires some additional time.",
+    "grade": "A",
+    "advice": "Practice SQL queries and understand database normalization. Collaborate with classmates when working on projects."
+  },
+  {
+    "course_name": "Database Systems",
+    "course_code": "CSCI-585",
+    "semester": "Fall 2026",
+    "instructor": "Saty Raghavachary",
+    "difficulty": "4.0",
+    "assessments": "Programming assignments, database implementation project, quizzes, and a final examination.",
+    "workload": "Moderately demanding, especially when multiple assignments and project deadlines overlap.",
+    "grade": "B+",
+    "advice": "Do not underestimate the projects. Review indexing, transactions, and query optimization."
+  },
+  {
+    "course_name": "Applied Natural Language Processing",
+    "course_code": "CSCI-544",
+    "semester": "Fall 2026",
+    "instructor": "Xiang Ren",
+    "difficulty": "4.0",
+    "assessments": "Python homework assignments, paper reviews, group research project, project presentations, and final report.",
+    "workload": "Moderately demanding. Programming assignments and research papers require consistent effort.",
+    "grade": "A-",
+    "advice": "Have a good understanding of Python and machine learning fundamentals. Start the final project early."
+  },
+  {
+    "course_name": "Applied Natural Language Processing",
+    "course_code": "CSCI-544",
+    "semester": "Fall 2026",
+    "instructor": "Xiang Ren",
+    "difficulty": "3.5",
+    "assessments": "Python programming assignments, research paper discussions, paper reviews, and a group project.",
+    "workload": "Manageable workload if you have prior machine learning experience. Reading research papers takes some extra time.",
+    "grade": "A",
+    "advice": "Stay updated with NLP research and review Python libraries used for text processing."
+  },
+  {
+    "course_name": "Applied Natural Language Processing",
+    "course_code": "CSCI-544",
+    "semester": "Fall 2026",
+    "instructor": "Xiang Ren",
+    "difficulty": "4.5",
+    "assessments": "Programming assignments, weekly paper readings, individual research project, and final project presentations.",
+    "workload": "Heavy workload due to the combination of programming, research, and project implementation.",
+    "grade": "B+",
+    "advice": "Make sure you understand neural networks and language models. Do not leave paper reviews until the last minute."
+  },
+  {
+    "course_name": "Deep Learning and Its Applications",
+    "course_code": "CSCI-566",
+    "semester": "Fall 2026",
+    "instructor": "Yue Zhao",
+    "difficulty": "4.5",
+    "assessments": "In-class quizzes, programming assignment, midterm, and a course project with a final report and presentation. No final exam.",
+    "workload": "Quite demanding because of the mathematical concepts and programming requirements. The project requires consistent effort.",
+    "grade": "B+",
+    "advice": "Review linear algebra, probability, and Python before taking this course."
+  },
+  {
+    "course_name": "Deep Learning and Its Applications",
+    "course_code": "CSCI-566",
+    "semester": "Fall 2026",
+    "instructor": "Yue Zhao",
+    "difficulty": "4.0",
+    "assessments": "Programming assignment, in-class quizzes, midterm examination, and a customizable final project.",
+    "workload": "Moderately heavy workload. Training models and completing programming assignments can take considerable time.",
+    "grade": "A-",
+    "advice": "Experiment with different neural network architectures and make sure you understand the mathematical foundations."
+  },
+  {
+    "course_name": "Deep Learning and Its Applications",
+    "course_code": "CSCI-566",
+    "semester": "Fall 2026",
+    "instructor": "Yue Zhao",
+    "difficulty": "5.0",
+    "assessments": "Programming assignment, dynamic in-class quizzes, midterm, and a major course project.",
+    "workload": "Very demanding course, particularly for students without previous machine learning experience.",
+    "grade": "B",
+    "advice": "Review calculus, linear algebra, and probability. Keep up with lectures and start the project early."
+  },
+  {
+    "course_name": "Robot Learning",
+    "course_code": "CSCI-642",
+    "semester": "Fall 2026",
+    "instructor": "Erdem Bıyık",
+    "difficulty": "4.0",
+    "assessments": "Homework assignments, research paper presentations, midterm examination, group project, and peer review.",
+    "workload": "Moderately difficult. Requires programming, machine learning knowledge, and an understanding of robotics concepts.",
+    "grade": "A-",
+    "advice": "Review machine learning and robotics fundamentals. Keep up with research papers and start the project early."
+  },
+  {
+    "course_name": "Robot Learning",
+    "course_code": "CSCI-642",
+    "semester": "Fall 2026",
+    "instructor": "Erdem Bıyık",
+    "difficulty": "3.5",
+    "assessments": "Homework assignments, research paper discussions, project proposal, milestone report, and final project presentation.",
+    "workload": "Interesting but moderately demanding. The research readings and project require consistent effort.",
+    "grade": "A",
+    "advice": "Participate in paper discussions and understand reinforcement learning concepts before working on the project."
+  },
+  {
+    "course_name": "Robot Learning",
+    "course_code": "CSCI-642",
+    "semester": "Fall 2026",
+    "instructor": "Erdem Bıyık",
+    "difficulty": "4.5",
+    "assessments": "Programming homework, midterm exam, research paper presentations, group project, and individual peer review.",
+    "workload": "Heavy workload because of the combination of theoretical material, research, and practical project work.",
+    "grade": "B+",
+    "advice": "Make sure you have basic machine learning knowledge and divide project responsibilities among teammates."
+  },
+  {
+    "course_name": "Introduction to Cryptography",
+    "course_code": "CSCI-556",
+    "semester": "Fall 2026",
+    "instructor": "Shang-Hua Teng",
+    "difficulty": "4.5",
+    "assessments": "Class participation, quizzes, mathematical assignments, a team project presentation, and an individual term report.",
+    "workload": "Mathematically challenging. Requires understanding of encryption, security protocols, number theory, and probability.",
+    "grade": "B+",
+    "advice": "Review modular arithmetic and basic cryptography concepts before starting."
+  },
+  {
+    "course_name": "Introduction to Cryptography",
+    "course_code": "CSCI-556",
+    "semester": "Fall 2026",
+    "instructor": "Shang-Hua Teng",
+    "difficulty": "4.0",
+    "assessments": "Quizzes, theoretical problem assignments, mathematical presentations, and a group cryptography project.",
+    "workload": "Moderately demanding. The theoretical concepts can be difficult, but consistent practice makes them easier to understand.",
+    "grade": "A-",
+    "advice": "Focus on understanding encryption algorithms, hashing, and digital signatures. Practice mathematical problems regularly."
+  },
+  {
+    "course_name": "Introduction to Cryptography",
+    "course_code": "CSCI-556",
+    "semester": "Fall 2026",
+    "instructor": "Shang-Hua Teng",
+    "difficulty": "5.0",
+    "assessments": "Mathematical assignments, quizzes, research-related presentations, team project, and individual final report.",
+    "workload": "Heavy workload because of the mathematical foundations and detailed security concepts covered throughout the course.",
+    "grade": "B",
+    "advice": "Do not memorize cryptographic algorithms without understanding how they work. Review number theory and modular arithmetic."
+  },
+  {
+    "course_name": "Graduate Advanced Game Project",
+    "course_code": "CSCI-529A",
+    "semester": "Fall 2026",
+    "instructor": "Andy Nealen",
+    "difficulty": "3.5",
+    "assessments": "Game development milestones, collaborative game project, progress reviews, and final game presentation. No traditional exams.",
+    "workload": "Project-heavy course. Most of the workload comes from developing, testing, and improving the game.",
+    "grade": "A",
+    "advice": "Choose a realistic game idea, divide responsibilities among teammates, and complete a working prototype early."
+  },
+  {
+    "course_name": "Graduate Advanced Game Project",
+    "course_code": "CSCI-529A",
+    "semester": "Fall 2026",
+    "instructor": "Andy Nealen",
+    "difficulty": "4.0",
+    "assessments": "Development milestones, weekly progress updates, peer evaluations, team project reviews, and final game demonstration.",
+    "workload": "Moderately heavy workload. Team coordination and debugging can take more time than expected.",
+    "grade": "A-",
+    "advice": "Use version control, communicate regularly with your teammates, and avoid adding too many features close to the deadline."
+  },
+  {
+    "course_name": "Graduate Advanced Game Project",
+    "course_code": "CSCI-529A",
+    "semester": "Fall 2026",
+    "instructor": "Andy Nealen",
+    "difficulty": "3.0",
+    "assessments": "Game development assignments, collaborative game project, milestone demonstrations, and final presentation. No traditional exams.",
+    "workload": "Fairly manageable if you have previous game development experience. The project requires consistent teamwork.",
+    "grade": "A",
+    "advice": "Choose a game engine you are comfortable using and divide the project into smaller tasks. Focus on completing the core gameplay first."
+  }
+]
