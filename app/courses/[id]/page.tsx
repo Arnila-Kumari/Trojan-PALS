@@ -1,11 +1,6 @@
-import { notFound } from "next/navigation";
-import { courses } from "@/lib/data";
+"use client";
+import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useApp } from "@/components/app-provider";
 import { CourseDetail } from "@/components/course-detail";
-
-export function generateStaticParams() { return courses.map(course => ({ id: course.slug })); }
-export default async function Page({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  const course = courses.find(item => item.slug === id);
-  if (!course) notFound();
-  return <CourseDetail course={course} />;
-}
+export default function Page(){const {id}=useParams<{id:string}>();const {courses}=useApp();const course=courses.find(c=>c.slug===id);if(!course)return <div className="page"><div className="empty-state"><h1>Course not found</h1><p>This course is not in the connected catalog.</p><Link className="btn primary" href="/courses">Back to courses</Link></div></div>;return <CourseDetail course={course} key={course.id}/>;}

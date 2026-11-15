@@ -1,3 +1,5 @@
+> Backend integration installed. Start with [BACKEND_SETUP.md](BACKEND_SETUP.md) for Supabase, accounts, and persistent reviews.
+
 # TrojanPals
 
 A responsive Next.js + TypeScript frontend for exploring courses, talking through academic interests, and discovering research directions. Built for a USC campus-life hackathon.
