@@ -1,4 +1,4 @@
-# Connect TrojanPals to Supabase
+# Connect TrojanPALS to Supabase
 
 This package contains the complete integrated Next.js application and an installer for updating your current project. No deployment or database has been created for you. A Supabase project and its connection values are required for live login and persistence.
 
@@ -75,28 +75,20 @@ Use a publishable key. **Do not put a secret or service-role key into a NEXT_PUB
 
 Keep `.env.local` out of Git. The supplied `.gitignore` already ignores environment files while allowing the blank `.env.example` template.
 
-## 4. Configure email login and confirmation
+## 4. Configure Google Sign-In
 
-In Supabase Authentication:
+In Google Cloud Console, create a **Web application** OAuth client and add Supabase's callback URL (`https://<project-ref>.supabase.co/auth/v1/callback`) as an authorized redirect URI. In Supabase Authentication → Providers → Google, enable Google and enter that OAuth client ID and secret. Disable the email/password provider if it is enabled; TrojanPALS offers Google Sign-In only.
 
-1. Enable the email/password provider and new-user signups.
-2. Set **Site URL** to `http://localhost:3000` for local testing.
-3. Allow `http://localhost:3000/auth/callback` as a redirect URL.
-4. Leave email confirmation enabled for real students.
+In Supabase Authentication → URL Configuration:
 
-The app supports the standard confirmation callback. Open signup links in the **same browser** used to sign up, because the default PKCE confirmation flow relies on a browser-held verifier.
+1. Set **Site URL** to `http://localhost:3000` for local development.
+2. Add `http://localhost:3000/auth/callback` to the redirect URL allowlist. Add the equivalent callback for each deployed app origin.
 
-For confirmation across browsers/devices, the app also provides `/auth/confirm`. In the signup confirmation email template, use the token-hash link pattern:
+Open the app at `http://localhost:3000` consistently during local sign-in. Do not start OAuth at `0.0.0.0:3000`: Supabase may return an authentication error to the configured Site URL (`localhost`), while the browser's OAuth verifier is tied to the original host.
 
-```text
-{{ .SiteURL }}/auth/confirm?token_hash={{ .TokenHash }}&type=email
-```
+TrojanPALS uses Google OAuth only. It requests the Google account chooser and provides `usc.edu` as a domain hint, so the student can select their USC account. It enforces the exact `@usc.edu` email domain in the database; the hint alone is not a security check. Database access also requires a Google identity in the Supabase session. Rerun `supabase/migrations/001_backend.sql` in SQL Editor to apply the updated checks to an existing project. No email/password provider or confirmation email is needed.
 
-Use this only in the Supabase email template, not in your app code. The server verifies the token and redirects to the app; no user-supplied redirect destination is accepted.
-
-If confirmation mail is delayed or rate limited, check spam and your Supabase Auth/email settings. Supabase's built-in mail service is for limited testing, may deliver only to project-team email addresses, and has strict rate limits. Configure your own SMTP provider to support other students' email addresses. For an isolated hackathon test project you may choose to disable email confirmation temporarily; this does not verify that the student owns the entered email. Restore confirmation for real use.
-
-This app does not claim to verify USC enrollment or restrict signups to USC email addresses. It uses ordinary email/password authentication.
+The domain check does not independently verify current USC enrollment; it requires Google to provide an email ending exactly in `@usc.edu`.
 
 ## 5. Start the site
 
@@ -108,8 +100,8 @@ Open http://localhost:3000.
 
 Expected workflow:
 
-1. A signed-out visitor sees **Sign in / Create account**.
-2. A new student signs up and confirms their email if required.
+1. A signed-out visitor chooses **Continue with Google**.
+2. The student signs in with a Google account whose email ends exactly in `@usc.edu`.
 3. An account without a completed profile sees **Create your student profile**.
 4. They enter their name/program/preferences, optionally starting from a supplied template.
 5. Saving creates a private `profiles` row owned by their Supabase Auth user ID.
@@ -133,7 +125,7 @@ OPENAI_MODEL=your_model_id
 
 Choose a model available to your API account that supports **Responses API + Structured Outputs**. A ChatGPT sign-in is not an API credential. No OpenAI SDK installation is needed; the route uses server-side `fetch`.
 
-- The UI lets students omit saved profile fields from each request. Recent conversation is still included; it can contain anything they previously shared.
+- Each chat request includes the signed-in student's relevant saved profile fields, recent conversation, and review excerpts. Conversation history may contain anything they previously shared.
 - Account name, email, user IDs, and database credentials are not automatically attached to the model request.
 - Context includes only the current user's relevant preferences and a bounded set of course/review excerpts.
 - Source reference IDs are validated against the retrieved records before displaying links. This does not prove every sentence is supported; review generated recommendations and their cited evidence.
@@ -176,7 +168,7 @@ The bootstrap loads at most 1,000 review rows for this small prototype. Your 28 
 | `PATCH /api/reviews/[id]` | Edit the current user's review |
 | `DELETE /api/reviews/[id]` | Delete the current user's review |
 | `POST /api/chat` | Profile-aware matching or optional live AI |
-| `/auth/callback`, `/auth/confirm` | Email/session confirmation |
+| `/auth/callback` | Google OAuth callback |
 
 ## Checks
 

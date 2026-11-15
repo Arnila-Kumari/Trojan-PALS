@@ -15,6 +15,64 @@ export function ChatPage(){
   const reply=await api<ChatReply>("/api/chat","POST",{message:value,useProfile,contextSlug,history});if(mounted.current)setMessages(previous=>[...previous,{id:`assistant-${id}`,role:"assistant",...reply}]);
  }catch(reason){if(mounted.current){setInput(value);setError(reason instanceof Error?reason.message:"The message could not be sent.");}}finally{pending.current=false;if(mounted.current)setBusy(false);}}
  function submit(event:FormEvent){event.preventDefault();void send(input);}
- return <div className="page chat-page"><section className="page-heading"><div><div className="eyebrow"><span/>THINK OUT LOUD. FIND YOUR DIRECTION.</div><h1>A little guidance.<em> A clearer path.</em></h1><p>Discuss courses using your account preferences and the connected review records.</p></div><button className="btn secondary" disabled={busy||messages.length<=1} onClick={()=>{setMessages([welcomeMessage]);setError("");}}><Icon name="plus" size={16}/>New conversation</button></section><div className="chat-layout"><section className="chat-panel panel" aria-label="Academic companion"><div className="chat-panel-header"><span className="assistant-avatar"><Icon name="spark" size={21}/></span><div><h2>TrojanPals companion</h2><p><span className="status-dot"/>Profile-aware server · Mode labeled on each reply</p></div></div>{context&&<div className="chat-context"><Icon name="book" size={16}/>Exploring {context.id}: {context.title}<button className="icon-button" aria-label="Remove course context" onClick={()=>setContextSlug(undefined)}><Icon name="close" size={14}/></button></div>}<div className="chat-personalization"><label><input type="checkbox" checked={useProfile} disabled={busy} onChange={e=>setUseProfile(e.target.checked)}/>Use my saved profile preferences</label><small>With live AI enabled, your question, recent conversation, relevant preferences, and review excerpts go to the AI provider. Your account name and email are not automatically attached. Turning this off omits profile fields; conversation history is still included.</small></div>
- <div className="messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">{messages.map(message=><article className={`message ${message.role}`} key={message.id}><span className={message.role==="assistant"?"message-avatar":"message-avatar user-avatar"}>{message.role==="assistant"?<Icon name="spark" size={17}/>:profile.name.slice(0,1).toUpperCase()}</span><div className="message-content"><span className="message-author">{message.role==="assistant"?`TrojanPals${message.mode?message.mode==="llm"?" · Live AI":" · Server matching":""}`:"You"}</span><p style={{ whiteSpace: "pre-wrap" }}>{message.text}</p>{message.courseIds&&<div className="chat-result-links">{message.courseIds.map(id=>courses.find(c=>c.id===id)).filter(c=>!!c).map(c=><Link href={`/courses/${c.slug}`} key={c.id}><Icon name="book" size={15}/>{c.id}<span>{c.title}</span><Icon name="arrow" size={14}/></Link>)}</div>}{message.researchIds&&<div className="chat-result-links">{message.researchIds.map(id=>researchAreas.find(r=>r.id===id)).filter(r=>!!r).map(r=><Link href={`/research#${r.id}`} key={r.id}><Icon name="flask" size={15}/>{r.title}<Icon name="arrow" size={14}/></Link>)}</div>}{message.reviewIds&&message.reviewIds.length>0&&<div className="chat-evidence"><strong>Review records used</strong>{message.reviewIds.map(id=>reviews.find(r=>r.id===id)).filter(r=>!!r).map((r,i)=>{const course=courses.find(c=>c.id===r.courseCode);return course?<Link key={r.id} href={`/courses/${course.slug}#review-${r.id}`}>[{i+1}] {r.courseCode} · {r.semester} · {r.sourceKind==="imported"?`Supplied record ${r.sourceRow}`:"Student submission"}</Link>:null;})}</div>}</div></article>)}{busy&&<div className="typing" role="status"><span/><span/><span/><small>Preparing a response…</small></div>}<div ref={bottom}/></div><div className="chat-compose">{error&&<p className="form-error" role="alert">{error}</p>}<form onSubmit={submit}><label className="sr-only" htmlFor="chat-input">Your message</label><textarea id="chat-input" maxLength={2000} placeholder={context?`Ask about ${context.id}…`:"Tell me what you’re curious about…"} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();void send(input);}}} rows={2}/><button className="send-button" type="submit" disabled={!input.trim()||busy} aria-label="Send message"><Icon name="arrow" size={21}/></button></form><p>Review reports are unverified. Confirm enrollment information with official sources.</p></div></section><aside className="chat-aside"><div className="panel"><span className="tiny-label">START WITH A QUESTION</span><h3>Follow your curiosity.</h3><div className="prompt-list">{prompts.map(prompt=><button key={prompt} disabled={busy} onClick={()=>void send(prompt)}>{prompt}<Icon name="arrow" size={16}/></button>)}</div></div><div className="advice-note"><Icon name="target" size={24}/><h3>Built around you.</h3><p>Your profile is loaded from your signed-in account. We don’t use another student’s private profile.</p><Link href="/profile" className="text-button">Update my preferences <Icon name="arrow" size={15}/></Link></div></aside></div></div>;
+ return (
+  <div className="page chat-page">
+   <section className="page-heading">
+    <div>
+     <div className="eyebrow"><span/>THINK OUT LOUD. FIND YOUR DIRECTION.</div>
+     <h1>A little guidance.<em> A clearer path.</em></h1>
+     <p>Discuss courses using your account preferences and the connected review records.</p>
+    </div>
+    <button className="btn secondary" disabled={busy||messages.length<=1} onClick={()=>{setMessages([welcomeMessage]);setError("");}}>
+     <Icon name="plus" size={16}/>New conversation
+    </button>
+   </section>
+   <div className="chat-layout">
+    <section className="chat-panel panel" aria-label="Academic companion">
+     <div className="chat-panel-header">
+      <span className="assistant-avatar"><Icon name="spark" size={21}/></span>
+      <div><h2>TrojanPALS companion</h2><p><span className="status-dot"/>Profile-aware server · Mode labeled on each reply</p></div>
+     </div>
+     {context&&<div className="chat-context"><Icon name="book" size={16}/>Exploring {context.id}: {context.title}<button className="icon-button" aria-label="Remove course context" onClick={()=>setContextSlug(undefined)}><Icon name="close" size={14}/></button></div>}
+     <div className="chat-personalization"><label><input type="checkbox" checked={useProfile} disabled={busy} onChange={e=>setUseProfile(e.target.checked)}/>Use my saved profile preferences</label><small>When enabled, your saved academic preferences and recent conversation are used for AI guidance. Turning this off omits saved profile preferences, but your message and recent conversation are still processed.</small></div>
+      <div className="messages" role="log" aria-label="Conversation" aria-live="polite" aria-relevant="additions">
+      {messages.map(message=><article className={`message ${message.role}`} key={message.id}>
+       <span className={message.role==="assistant"?"message-avatar":"message-avatar user-avatar"}>{message.role==="assistant"?<Icon name="spark" size={17}/>:profile.name.slice(0,1).toUpperCase()}</span>
+       <div className="message-content">
+        <span className="message-author">{message.role==="assistant"?`TrojanPALS${message.mode?message.mode==="llm"?" · Live AI":" · Server matching":""}`:"You"}</span>
+        <p style={{ whiteSpace: "pre-wrap" }}>{message.text}</p>
+        {message.courseIds&&<div className="chat-result-links">{message.courseIds.map(id=>courses.find(c=>c.id===id)).filter(c=>!!c).map(c=><Link href={`/courses/${c.slug}`} key={c.id}><Icon name="book" size={15}/>{c.id}<span>{c.title}</span><Icon name="arrow" size={14}/></Link>)}</div>}
+        {message.researchIds&&<div className="chat-result-links">{message.researchIds.map(id=>researchAreas.find(r=>r.id===id)).filter(r=>!!r).map(r=><Link href={`/research#${r.id}`} key={r.id}><Icon name="flask" size={15}/>{r.title}<Icon name="arrow" size={14}/></Link>)}</div>}
+        {message.reviewIds&&message.reviewIds.length>0&&<div className="chat-evidence"><strong>Review records used</strong>{message.reviewIds.map(id=>reviews.find(r=>r.id===id)).filter(r=>!!r).map((r,i)=>{const course=courses.find(c=>c.id===r.courseCode);return course?<Link key={r.id} href={`/courses/${course.slug}#review-${r.id}`}>[{i+1}] {r.courseCode} · {r.semester} · {r.sourceKind==="imported"?`Supplied record ${r.sourceRow}`:"Student submission"}</Link>:null;})}</div>}
+       </div>
+      </article>)}
+      {busy&&<div className="typing" role="status"><span/><span/><span/><small>Preparing a response…</small></div>}
+      <div ref={bottom}/>
+     </div>
+     <div className="chat-compose">
+      {error&&<p className="form-error" role="alert">{error}</p>}
+      <form onSubmit={submit}>
+       <label className="sr-only" htmlFor="chat-input">Your message</label>
+       <textarea id="chat-input" maxLength={2000} placeholder={context?`Ask about ${context.id}…`:"Tell me what you’re curious about…"} value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{if(e.key==="Enter"&&!e.shiftKey&&!e.nativeEvent.isComposing){e.preventDefault();void send(input);}}} rows={2}/>
+       <button className="send-button" type="submit" disabled={!input.trim()||busy} aria-label="Send message"><Icon name="arrow" size={21}/></button>
+      </form>
+      <p>Review reports are unverified. Confirm enrollment information with official sources.</p>
+     </div>
+    </section>
+    <aside className="chat-aside">
+     <div className="panel">
+      <span className="tiny-label">START WITH A QUESTION</span>
+      <h3>Follow your curiosity.</h3>
+      <div className="prompt-list">{prompts.map(prompt=><button key={prompt} disabled={busy} onClick={()=>void send(prompt)}>{prompt}<Icon name="arrow" size={16}/></button>)}</div>
+     </div>
+     <div className="advice-note">
+      <Icon name="target" size={24}/>
+      <h3>Built around you.</h3>
+      <p>Your profile is loaded from your signed-in account. We don’t use another student’s private profile.</p>
+      <Link href="/profile" className="text-button">Update my preferences <Icon name="arrow" size={15}/></Link>
+     </div>
+    </aside>
+   </div>
+  </div>
+ );
 }

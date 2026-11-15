@@ -187,6 +187,13 @@ export async function POST(request: Request) {
       ? `Regarding ${selectedCourse.id} (${selectedCourse.title}): ${message}`
       : message;
 
+    // Preserve the authenticated chat rate limit from the updated backend.
+    const { data: allowed, error: quotaError } = await db.rpc("consume_chat_quota");
+    checkDatabase(quotaError);
+    if (!allowed) {
+      throw new HttpError(429, "You've reached the AI chat limit. Try again later (12 requests/minute, 100/day).");
+    }
+
     // 7. Forward to FastAPI.
     const backendUrl = (
       process.env.FASTAPI_INTERNAL_URL ??
