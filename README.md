@@ -8,6 +8,8 @@ Instead of searching through course catalogs, professor directories, and researc
 
 Built for a USC hackathon.
 
+Deployed at: https://trojan-pals-web-881766105300.us-central1.run.app/
+
 ---
 
 ## Features
